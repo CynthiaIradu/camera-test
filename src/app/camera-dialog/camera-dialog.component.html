@@ -1,0 +1,47 @@
+<div id="iconContainer">
+    <button mat-icon-button id="rotateIcon" (click)="updateVideoStream()">
+      <mat-icon>cameraswitch</mat-icon>
+    </button>
+    <button id="closeIcon" mat-icon-button aria-label="close dialog" (click)="cancel()" mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <mat-form-field appearance="fill">
+    <mat-label>Video Input</mat-label>
+    <mat-select
+      [(ngModel)]="selectedVideoInput"
+      name="videoInput"
+      #select="matSelect"
+      (selectionChange)="onSelect(selectedVideoInput)"
+      [disabled]="selectDisabled"
+    >
+      <mat-option *ngFor="let videoInput of videoInputs" [value]="videoInput.value">
+        {{ videoInput.viewValue }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <div id="imgContainer">
+    <video id="video" #video></video>
+    <div>
+      <canvas id="canvas" #canva></canvas>
+      <div class="output">
+        <img id="photo" #photo alt="The photo taken will appear in this box." />
+      </div>
+    </div>
+  </div>
+  <div id="btnContainer">
+    <button mat-raised-button id="endbutton" #endButton mat-dialog-close (click)="cancel()" color="warn">Stop camera</button>
+    <button mat-raised-button id="startbutton" #startButton (click)="takePhoto()" color="primary">{{ label }}</button>
+    <button
+      mat-raised-button
+      id="savePhoto"
+      mat-dialog-close
+      #saveButton
+      (click)="savePhoto()"
+      color="accent"
+      [disabled]="buttonDisabled"
+    >
+      Save Photo
+    </button>
+  </div>
+  

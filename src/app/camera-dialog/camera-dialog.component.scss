@@ -1,0 +1,67 @@
+#video {
+    border: 1px solid black;
+    box-shadow: 2px 2px 3px black;
+    width:320px;
+    height:240px;
+  }
+  
+  #photo {
+    border: 1px solid black;
+    box-shadow: 2px 2px 3px black;
+    width:320px;
+    height:240px;
+  }
+  
+  #canvas {
+    display:none;
+  }
+  
+  .camera {
+    width: 340px;
+    display:inline-block;
+  }
+  
+  .output {
+    width: 340px;
+    display:inline-block;
+  }
+  
+
+  #iconContainer{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  #btnContainer{
+    padding-top: 40px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 21px;
+  }
+
+  #imgContainer{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+
+  }
+
+  #rotateIcon{
+    align-self: flex-end ;
+  }
+
+  @media only screen and (max-width: 600px) {
+    #imgContainer{
+       flex-direction: column;
+       overflow: scroll;
+    }
+    #video, #photo, .camera, .output {
+       width:100%;
+     }
+     #btnContainer{
+      flex-wrap: wrap;
+     }
+    
+  }

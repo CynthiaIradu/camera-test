@@ -1,0 +1,180 @@
+import { Component } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, Inject, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatSelect, MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import {MatIconModule} from '@angular/material/icon';
+import {FormsModule} from '@angular/forms'
+import {MatButtonModule} from '@angular/material/button';
+import { CommonModule } from '@angular/common'
+
+interface videoInput  {
+  value: string;
+  viewValue: string;
+}
+@Component({
+  selector: 'app-camera-dialog',
+  templateUrl: './camera-dialog.component.html',
+  styleUrls: ['./camera-dialog.component.scss'],
+  standalone: true,
+  imports: [MatSelectModule, MatFormFieldModule, MatDialogModule, MatIconModule, FormsModule, MatButtonModule,CommonModule],
+  changeDetection: ChangeDetectionStrategy.OnPush
+ })
+export class CameraDialogComponent implements OnInit, AfterViewInit {
+  @ViewChild('video', { static: true }) video!: ElementRef<HTMLVideoElement>;
+  @ViewChild('canva', { static: true }) canva!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('photo', { static: true }) photo!: ElementRef<HTMLImageElement>;
+  @ViewChild('select') select!: MatSelect;
+  width: number = 400;
+  height: number = 400;
+  buttonDisabled!: boolean;
+  label!: string;
+  stream!: MediaStream;
+  selectedVideoInput!: string;
+  notificationService: any;
+  videoInputs!: videoInput[];
+  selectDisabled!: boolean;
+  front!:boolean;
+
+  constructor(
+    private dialogRef: MatDialogRef<CameraDialogComponent>,
+    @Inject(PLATFORM_ID) private _platform: Object,
+    private cd: ChangeDetectorRef
+  ) {
+   }
+
+   ngOnInit() {
+    this.buttonDisabled = true;
+    this.selectDisabled = true;
+    this.label = 'Take Photo';
+    this.videoInputs = [];
+    this.front = true
+ 
+  }
+
+  ngAfterViewInit(){
+    this.startUp();
+
+  }
+  
+ 
+  takePhoto() {
+    let context = this.canva.nativeElement.getContext('2d');
+      if (this.width && this.height) {
+      this.canva.nativeElement.width = this.width;
+      this.canva.nativeElement.height = this.height;
+      context?.drawImage(this.video.nativeElement, 0, 0, this.width, this.height);
+
+      let data = this.canva?.nativeElement.toDataURL('image/png');
+      if (data) {
+        this.photo.nativeElement.setAttribute('src', data);
+        this.buttonDisabled = false;
+        this.label = 'Retake Photo';
+      }
+    } else {
+      this.cancel();
+    }
+  }
+
+  savePhoto() {
+    this.canva.nativeElement.toBlob((blob) => {
+      // let file = new File([blob], 'myPhoto.jpg', { type: 'image/jpeg' });
+      this.cancel();
+      this.dialogRef.close("test");
+    }, 'image/jpeg');
+  }
+  async findAvailableCameras() {
+    if (!navigator.mediaDevices?.enumerateDevices) {
+      console.log('enumerateDevices() not supported.');
+    } else {
+      try {
+        let devices = await navigator.mediaDevices.enumerateDevices();
+         devices.forEach((device) => {
+          // List cameras .
+          if (device.kind == 'videoinput' && device.label) {
+             this.videoInputs.push({ value: device.deviceId, viewValue: device.label });
+          }
+          });
+          this.cd.detectChanges()
+          this.selectedVideoInput = this.videoInputs[0].value
+          this.selectDisabled = false;
+          this.updateVideoStream()
+         } catch (err) {
+        console.error(err);
+      }
+    }
+  }
+  cancel() {
+   
+    this.resetCanva()
+    this.stopVideo()
+  }
+
+  stopVideo(){
+    this.video.nativeElement.pause();
+    (this.video.nativeElement.srcObject as MediaStream).getVideoTracks().forEach((track) => track.stop());
+    this.video.nativeElement.srcObject = null;
+  }
+
+  resetCanva(){
+    let context = this.canva.nativeElement.getContext('2d');
+    if(context){
+      context.fillStyle = '#AAA';
+      context.fillRect(0, 0, this.canva.nativeElement.width, this.canva.nativeElement.height);
+      let data = this.canva.nativeElement.toDataURL('image/png');
+      this.photo.nativeElement.setAttribute('src', data);
+    }
+ 
+  }
+
+  async startUp() {
+    if (isPlatformBrowser(this._platform) && 'mediaDevices' in navigator) {
+      try {
+        this.stream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+          audio: false,
+        });
+        this.findAvailableCameras()
+        const _video = this.video.nativeElement;
+        const _canva = this.canva.nativeElement;
+        _video.setAttribute('height', this.height.toString());
+        _video.setAttribute('width', this.width.toString());
+        _canva.setAttribute('height', this.height.toString());
+        _canva.setAttribute('width', this.width.toString());
+        _video.srcObject = this.stream;
+        _video.play();
+      } catch (err) {
+        this.notificationService.error(err);
+      }
+    } else {
+      this.notificationService.error('Current browser is not supported');
+    }
+  }
+ 
+  async updateVideoStream(){
+    this.stopVideo()
+    const _video = this.video.nativeElement;
+    try{
+      this.stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: this.front ? "user" : "environment",
+          deviceId: this.selectedVideoInput
+        },
+        audio: false,
+      });
+    }catch(error){
+      console.log(error)
+    }
+    
+    _video.srcObject = this.stream;
+    _video.play();
+  }
+  
+  onSelect(selectedVideoInput:string){
+     this.updateVideoStream()
+   }
+
+    
+}
+
