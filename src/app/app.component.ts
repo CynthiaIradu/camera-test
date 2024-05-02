@@ -28,7 +28,7 @@ console.log(event)
           audio: false,
         });
         if(this.isCaptureAttributeSupported()){
-          this.cameraInput.click()
+           document.getElementById('input')?.click()
         }else{
           this.openDialog2(stream)
         }

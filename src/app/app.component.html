@@ -1,8 +1,10 @@
 <input #camera
+[hidden]="true"
 type="file"
+id="input"
 accept="image/*"
 capture="camera"
 multiple="true"
 (change)="onFileSelected($event)"
 title="">
-<button (click)="camera.click()">open dialog</button>
+<button (click)="openDialog()">open dialog</button>
