@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, Inject, PLATFORM_ID, ViewChild } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { CameraDialogComponent } from './camera-dialog/camera-dialog.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-@Component({
+ import { isPlatformBrowser } from '@angular/common';
+  @Component({
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet, MatDialogModule],
@@ -11,19 +12,47 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 })
 export class AppComponent {
   title = 'cameraTest';
-  constructor( public dialog: MatDialog){
-
-  }
-
-  openDialog(){
-    console.log("clicked")
-    let dialogRef = this.dialog.open(CameraDialogComponent, {});
-
-    dialogRef.afterClosed().subscribe((photo) => {
-      if (photo) {
-        console.log(photo)
+  notificationService: any;
+  @ViewChild('camera') cameraInput!: HTMLInputElement
+  constructor( public dialog: MatDialog, @Inject(PLATFORM_ID) private _platform: Object,
+){}
+ 
+onFileSelected(event: Event){
+console.log(event)
+}
+  async openDialog(){
+    if (isPlatformBrowser(this._platform) && 'mediaDevices' in navigator) {
+      try {
+        let stream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+          audio: false,
+        });
+        if(this.isCaptureAttributeSupported()){
+          this.cameraInput.click()
+        }else{
+          this.openDialog2(stream)
+        }
+        
+       } catch (err) {
+        alert(err);
       }
-    });
+    } else {
+      alert('Current browser is not supported');
+    }
   }
+
+  isCaptureAttributeSupported() {
+    var input = document.createElement('input');
+    return 'capture' in input;
+   }
+
+   openDialog2(stream:MediaStream){
+    let dialogRef = this.dialog.open(CameraDialogComponent, {data:{stream:stream}});
+        dialogRef.afterClosed().subscribe((photo) => {
+         if (photo) {
+          console.log(photo)
+         }
+         });
+   }
 
 }

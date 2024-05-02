@@ -1,23 +1,22 @@
-import { Component } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, Inject, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, DoCheck, ElementRef, Inject, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { MatSelect, MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import {MatIconModule} from '@angular/material/icon';
-import {FormsModule} from '@angular/forms'
-import {MatButtonModule} from '@angular/material/button';
-import { CommonModule } from '@angular/common'
+import { MatSelect, MatSelectModule } from '@angular/material/select';
+  import {MatIconModule} from '@angular/material/icon';
+ import {MatButtonModule} from '@angular/material/button';
+ 
 
 interface videoInput  {
   value: string;
   viewValue: string;
 }
 @Component({
-  selector: 'app-camera-dialog',
+  selector: 'camera-dialog',
   templateUrl: './camera-dialog.component.html',
   styleUrls: ['./camera-dialog.component.scss'],
-  standalone: true,
+   standalone: true,
   imports: [MatSelectModule, MatFormFieldModule, MatDialogModule, MatIconModule, FormsModule, MatButtonModule,CommonModule],
   changeDetection: ChangeDetectionStrategy.OnPush
  })
@@ -32,29 +31,37 @@ export class CameraDialogComponent implements OnInit, AfterViewInit {
   label!: string;
   stream!: MediaStream;
   selectedVideoInput!: string;
-  notificationService: any;
   videoInputs!: videoInput[];
   selectDisabled!: boolean;
-  front!:boolean;
+  playPromise!:Promise<void>;
+
 
   constructor(
     private dialogRef: MatDialogRef<CameraDialogComponent>,
-    @Inject(PLATFORM_ID) private _platform: Object,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    @Inject(MAT_DIALOG_DATA) public data: {stream: MediaStream}
+    
   ) {
-   }
+
+  }
 
    ngOnInit() {
     this.buttonDisabled = true;
     this.selectDisabled = true;
     this.label = 'Take Photo';
     this.videoInputs = [];
-    this.front = true
- 
   }
 
-  ngAfterViewInit(){
-    this.startUp();
+  async ngAfterViewInit(){
+    this.findAvailableCameras()
+    const _video = this.video.nativeElement;
+    const _canva = this.canva.nativeElement;
+    _video.setAttribute('height', this.height.toString());
+    _video.setAttribute('width', this.width.toString());
+    _canva.setAttribute('height', this.height.toString());
+    _canva.setAttribute('width', this.width.toString());
+    _video.srcObject = this.data.stream;
+    await _video.play();
 
   }
   
@@ -66,7 +73,7 @@ export class CameraDialogComponent implements OnInit, AfterViewInit {
       this.canva.nativeElement.height = this.height;
       context?.drawImage(this.video.nativeElement, 0, 0, this.width, this.height);
 
-      let data = this.canva?.nativeElement.toDataURL('image/png');
+      let data = this.canva.nativeElement.toDataURL('image/png');
       if (data) {
         this.photo.nativeElement.setAttribute('src', data);
         this.buttonDisabled = false;
@@ -79,9 +86,8 @@ export class CameraDialogComponent implements OnInit, AfterViewInit {
 
   savePhoto() {
     this.canva.nativeElement.toBlob((blob) => {
-      // let file = new File([blob], 'myPhoto.jpg', { type: 'image/jpeg' });
-      this.cancel();
-      this.dialogRef.close("test");
+       this.cancel();
+      this.dialogRef.close('file');
     }, 'image/jpeg');
   }
   async findAvailableCameras() {
@@ -101,12 +107,11 @@ export class CameraDialogComponent implements OnInit, AfterViewInit {
           this.selectDisabled = false;
           this.updateVideoStream()
          } catch (err) {
-        console.error(err);
-      }
+          console.log(err)
+       }
     }
   }
   cancel() {
-   
     this.resetCanva()
     this.stopVideo()
   }
@@ -122,34 +127,10 @@ export class CameraDialogComponent implements OnInit, AfterViewInit {
     if(context){
       context.fillStyle = '#AAA';
       context.fillRect(0, 0, this.canva.nativeElement.width, this.canva.nativeElement.height);
-      let data = this.canva.nativeElement.toDataURL('image/png');
-      this.photo.nativeElement.setAttribute('src', data);
     }
- 
-  }
 
-  async startUp() {
-    if (isPlatformBrowser(this._platform) && 'mediaDevices' in navigator) {
-      try {
-        this.stream = await navigator.mediaDevices.getUserMedia({
-          video: true,
-          audio: false,
-        });
-        this.findAvailableCameras()
-        const _video = this.video.nativeElement;
-        const _canva = this.canva.nativeElement;
-        _video.setAttribute('height', this.height.toString());
-        _video.setAttribute('width', this.width.toString());
-        _canva.setAttribute('height', this.height.toString());
-        _canva.setAttribute('width', this.width.toString());
-        _video.srcObject = this.stream;
-        _video.play();
-      } catch (err) {
-        this.notificationService.error(err);
-      }
-    } else {
-      this.notificationService.error('Current browser is not supported');
-    }
+    let data = this.canva.nativeElement.toDataURL('image/png');
+    this.photo.nativeElement.setAttribute('src', data);
   }
  
   async updateVideoStream(){
@@ -158,7 +139,6 @@ export class CameraDialogComponent implements OnInit, AfterViewInit {
     try{
       this.stream = await navigator.mediaDevices.getUserMedia({
         video: {
-          facingMode: this.front ? "user" : "environment",
           deviceId: this.selectedVideoInput
         },
         audio: false,
@@ -168,13 +148,13 @@ export class CameraDialogComponent implements OnInit, AfterViewInit {
     }
     
     _video.srcObject = this.stream;
-    _video.play();
+     await _video.play();
   }
   
   onSelect(selectedVideoInput:string){
      this.updateVideoStream()
+     console.log(selectedVideoInput)
    }
 
     
 }
-
