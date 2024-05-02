@@ -1,8 +1,9 @@
 <input #camera
+[hidden]="true"
 type="file"
 id="input"
 accept="image/*"
-capture="camera"
+capture="user"
 multiple="true"
 (change)="onFileSelected($event)"
 title="">
