@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   Inject,
   OnInit,
@@ -14,6 +15,7 @@ import {  ChangeDetectorRef } from '@angular/core'
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet, MatDialogModule, CommonModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
@@ -30,7 +32,9 @@ export class AppComponent implements OnInit {
     @Inject(PLATFORM_ID) private _platform: Object
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.isCaptureAttributeSupported()
+  }
 
   onFileSelected(event: Event) {
     console.log(event);
@@ -58,8 +62,8 @@ export class AppComponent implements OnInit {
       this.hasPermission = true
       this.cd.detectChanges()
       }).catch((error)=>{
-      console.log(error)
-    })
+         console.log(error)
+     })
   }
 
   isCaptureAttributeSupported() {
