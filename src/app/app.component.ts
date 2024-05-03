@@ -11,6 +11,7 @@ import { CameraDialogComponent } from './camera-dialog/camera-dialog.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import {  ChangeDetectorRef } from '@angular/core'
+import { MatButton } from '@angular/material/button';
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -23,6 +24,8 @@ export class AppComponent implements OnInit {
   title = 'cameraTest';
   notificationService: any;
   @ViewChild('camera') cameraInput!: HTMLInputElement;
+  @ViewChild('cameraButton') cameraButton!: MatButton;
+
   hasPermission: boolean = false;
   isMobile: boolean = false;
   stream!: MediaStream;
@@ -34,11 +37,13 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.isCaptureAttributeSupported()
+     
   }
 
   onFileSelected(event: Event) {
     console.log(event);
   }
+
 
   async requestPermission() {
     if (isPlatformBrowser(this._platform) && 'mediaDevices' in navigator) {
@@ -61,7 +66,7 @@ export class AppComponent implements OnInit {
     this.requestPermission().then(() =>{
       this.hasPermission = true
       if(this.hasPermission && this.isMobile){
-        document.getElementById('test')?.click()
+        document.getElementById('input')?.click()
       }else{
         this.openDialog2()
       }

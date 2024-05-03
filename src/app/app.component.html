@@ -1,5 +1,4 @@
 <input #camera
-[hidden]="true"
 type="file"
 id="input"
 accept="image/*"
@@ -8,4 +7,4 @@ multiple="true"
 <p>{{hasPermission}}</p>
 <p>{{isMobile}}</p>
 <button (click)="openDialog()" >open dialog</button>
-<button #test (click)="camera.click()" style="display: none;" id="test">test</button>
+ 
