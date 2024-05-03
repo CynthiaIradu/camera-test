@@ -65,7 +65,9 @@ export class AppComponent implements OnInit, AfterViewInit {
       return Promise.reject();
     }
   }
-  
+  handleClick(){
+      document.getElementById('button')?.click()
+  }
  
   openDialog() {
     alert('clicked')
@@ -74,9 +76,6 @@ export class AppComponent implements OnInit, AfterViewInit {
           this.hasPermission = true;
           this.cd.detectChanges()
 
-          setTimeout(()=>{
-             document.getElementById('button')?.click()
-          }, 1)
         })
         .catch((error) => {
           this.hasPermission = false;
