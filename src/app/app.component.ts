@@ -74,9 +74,8 @@ export class AppComponent implements OnInit, AfterViewInit {
           this.cd.detectChanges()
 
           setTimeout(()=>{
-            alert('finished 0')
-            document.getElementById('button')?.click()
-          }, 0)
+             document.getElementById('button')?.click()
+          }, 5)
         })
         .catch((error) => {
           this.hasPermission = false;
