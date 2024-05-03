@@ -49,8 +49,9 @@ export class AppComponent implements OnInit {
   }
 
   openDialog(){
+    let input= document.getElementById('input')
     this.requestPermission().then(() =>{
-        document.getElementById('input')?.click()
+      input?.click()
     }).catch((error)=>{
       console.log(error)
     })
