@@ -67,8 +67,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     }
   }
   handleClick(){
-    alert('called')
-      document.getElementById('button')?.click()
+       document.getElementById('button')?.click()
       this.cameraButtonClicked = false;
       this.cd.detectChanges()
   }
