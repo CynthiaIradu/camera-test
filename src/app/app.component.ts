@@ -9,6 +9,7 @@ import { RouterOutlet } from '@angular/router';
 import { CameraDialogComponent } from './camera-dialog/camera-dialog.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
+import {  ChangeDetectorRef } from '@angular/core'
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -25,6 +26,7 @@ export class AppComponent implements OnInit {
   stream!: MediaStream;
   constructor(
     public dialog: MatDialog,
+    private cd: ChangeDetectorRef,
     @Inject(PLATFORM_ID) private _platform: Object
   ) {}
 
@@ -54,6 +56,7 @@ export class AppComponent implements OnInit {
   openDialog(){
     this.requestPermission().then(() =>{
       this.hasPermission = true
+      this.cd.detectChanges()
       }).catch((error)=>{
       console.log(error)
     })
