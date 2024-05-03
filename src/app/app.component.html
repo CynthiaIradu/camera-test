@@ -6,5 +6,6 @@ accept="image/*"
 multiple="true"
 (change)="onFileSelected($event)" capture="camera">
 <ng-container *ngIf="hasPermission?isMobile?camera.click():openDialog2():false" ></ng-container>
+{{hasPermission}}
 <button (click)="openDialog()">open dialog</button>
  
