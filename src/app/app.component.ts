@@ -60,6 +60,11 @@ export class AppComponent implements OnInit {
   openDialog(){
     this.requestPermission().then(() =>{
       this.hasPermission = true
+      if(this.hasPermission && this.isMobile){
+        document.getElementById('test')?.click()
+      }else{
+        this.openDialog2()
+      }
       this.cd.detectChanges()
       }).catch((error)=>{
          console.log(error)
