@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   Inject,
@@ -10,7 +11,7 @@ import { RouterOutlet } from '@angular/router';
 import { CameraDialogComponent } from './camera-dialog/camera-dialog.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import {  ChangeDetectorRef } from '@angular/core'
+import { ChangeDetectorRef } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 @Component({
   selector: 'app-root',
@@ -20,7 +21,7 @@ import { MatButton } from '@angular/material/button';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, AfterViewInit {
   title = 'cameraTest';
   notificationService: any;
   @ViewChild('camera') cameraInput!: HTMLInputElement;
@@ -34,51 +35,52 @@ export class AppComponent implements OnInit {
     private cd: ChangeDetectorRef,
     @Inject(PLATFORM_ID) private _platform: Object
   ) {}
+  ngAfterViewInit(): void {
+    document.getElementById('button')?.addEventListener('click', () => {
+      document.getElementById('input')?.click();
+    });
+  }
 
   ngOnInit(): void {
-    this.isCaptureAttributeSupported()
-     
+    this.isCaptureAttributeSupported();
   }
- 
+
   onFileSelected(event: Event) {
     console.log(event);
   }
 
-
   async requestPermission() {
     if (isPlatformBrowser(this._platform) && 'mediaDevices' in navigator) {
       try {
-          this.stream = await navigator.mediaDevices.getUserMedia({
+        this.stream = await navigator.mediaDevices.getUserMedia({
           video: true,
           audio: false,
         });
-         return Promise.resolve()
+        return Promise.resolve();
       } catch (err) {
-        alert(err)
-        return Promise.reject(err)
+        alert(err);
+        return Promise.reject(err);
       }
     } else {
-      return Promise.reject()
+      return Promise.reject();
     }
   }
 
-  openDialog(){
-    if(!this.stream){
-      this.requestPermission().then(() =>{
-        this.hasPermission = true
-        if(this.hasPermission && this.isMobile){
-          document.getElementById('button')?.addEventListener('click', () => {
-               document.getElementById('input')?.click()
-          })
-          document.getElementById('button')?.click()
-         }else{
-          this.openDialog2()
-        }
-         }).catch((error)=>{
-           console.log(error)
-       })
+  openDialog() {
+    if (!this.stream) {
+      this.requestPermission()
+        .then(() => {
+          this.hasPermission = true;
+          if (this.hasPermission && this.isMobile) {
+            document.getElementById('button')?.click();
+          } else {
+            this.openDialog2();
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
-   
   }
 
   isCaptureAttributeSupported() {
