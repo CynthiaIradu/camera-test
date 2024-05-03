@@ -52,7 +52,7 @@ export class AppComponent implements OnInit {
     this.requestPermission().then(() =>{
       setTimeout(() => {
         this.cameraInput.click();
-      }, 100); // Adjust the delay as needed
+      }, 0); // Adjust the delay as needed
     }).catch((error)=>{
       console.log(error)
     })
