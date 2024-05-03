@@ -76,7 +76,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     alert("opened")
          this.hasPermissions().then((result:any) =>{
              if(result.state == "granted"){
-              console.log("granted")
+              alert("granted")
                this.hasPermission = true;
                if(this.isMobile){
                 document.getElementById('button')?.click()
