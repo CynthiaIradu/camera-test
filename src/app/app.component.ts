@@ -71,12 +71,10 @@ export class AppComponent implements OnInit {
                document.getElementById('input')?.click()
           })
           document.getElementById('button')?.click()
-          this.cd.detectChanges()
-        }else{
+         }else{
           this.openDialog2()
         }
-        this.cd.detectChanges()
-        }).catch((error)=>{
+         }).catch((error)=>{
            console.log(error)
        })
     }
