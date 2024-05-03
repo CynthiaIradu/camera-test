@@ -79,7 +79,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     
   }
   handleClick(){
-    alert('test')
+    alert(this.hasPermission)
   }
 
   isCaptureAttributeSupported() {
