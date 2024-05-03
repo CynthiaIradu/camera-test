@@ -40,7 +40,8 @@ export class AppComponent implements OnInit {
         });
          return Promise.resolve()
       } catch (err) {
-        return Promise.reject()
+        alert(err)
+        return Promise.reject(err)
       }
     } else {
       return Promise.reject()
@@ -51,7 +52,7 @@ export class AppComponent implements OnInit {
     this.requestPermission().then(() =>{
         document.getElementById('input')?.click()
     }).catch((error)=>{
-      alert(error)
+      console.log(error)
     })
   }
 
