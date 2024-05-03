@@ -8,5 +8,6 @@ multiple="true"
 <ng-container *ngIf="hasPermission?isMobile?camera.click():openDialog2():false" ></ng-container>
 <p>{{hasPermission}}</p>
 <p>{{isMobile}}</p>
+<p>{{hasPermission?isMobile?"openMobileCamera":"OpenLaptopCamera":false}}</p>
 <button (click)="openDialog()">open dialog</button>
  
