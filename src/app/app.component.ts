@@ -70,6 +70,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         .then(() => {
           this.hasPermission = true;
           this.cameraButton._elementRef.nativeElement.click()
+          this.cd.detectChanges()
         })
         .catch((error) => {
           console.log(error);
