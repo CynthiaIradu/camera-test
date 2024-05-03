@@ -4,7 +4,5 @@ id="input"
 accept="image/*"
 multiple="true"
 (change)="onFileSelected($event)" capture="camera">
-<p>{{hasPermission}}</p>
-<p>{{isMobile}}</p>
-<button  #button id="button">open dialog</button>
- 
+<button  #button  (click)="openDialog()">open dialog</button>
+<button  #button id="button" style="display: none;">test</button>

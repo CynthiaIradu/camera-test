@@ -39,8 +39,7 @@ export class AppComponent implements OnInit {
     this.isCaptureAttributeSupported()
     document.getElementById('button')?.addEventListener('click', () => {
       document.getElementById('input')?.click()
-      alert(`clicked ${this.hasPermission}` )
-     })
+    })
      
   }
 
