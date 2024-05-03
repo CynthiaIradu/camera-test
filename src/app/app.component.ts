@@ -36,9 +36,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     @Inject(PLATFORM_ID) private _platform: Object
   ) {}
   ngAfterViewInit(): void {
-    document.getElementById('button')?.addEventListener('click', () => {
-      document.getElementById('input')?.click();
-    });
+    document.getElementById('button')?.addEventListener('click', this.handleClick);
   }
 
   ngOnInit(): void {
@@ -47,6 +45,11 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   onFileSelected(event: Event) {
     console.log(event);
+  }
+
+  handleClick(){
+    document.getElementById('input')?.click();
+
   }
 
   async requestPermission() {
