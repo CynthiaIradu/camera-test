@@ -7,7 +7,6 @@ multiple="true"
 (change)="onFileSelected($event)" capture="camera">
 <p>{{hasPermission}}</p>
 <p>{{isMobile}}</p>
-<p>{{hasPermission?isMobile?"openMobileCamera":"OpenLaptopCamera":false}}</p>
-<button (click)="camera.click()">open dialog</button>
+ <button (click)="openDialog()">open dialog</button>
 <button #test (click)="camera.click()">test</button>
 <ng-container *ngIf="hasPermission?isMobile?test.click():openDialog2():false" ></ng-container>
