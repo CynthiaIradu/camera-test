@@ -37,12 +37,15 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.isCaptureAttributeSupported()
-    document.getElementById('button')?.addEventListener('click', () => {
-      if(this.hasPermission && this.isMobile){
-        document.getElementById('input')?.click()
-      }
-    })
      
+  }
+  ngAfterViewInit(){
+    document.getElementById('button')?.addEventListener('click', this.handleClick.bind(this))
+  }
+  handleClick(){
+    if(this.hasPermission && this.isMobile){
+      document.getElementById('input')?.click()
+    }
   }
 
   onFileSelected(event: Event) {
