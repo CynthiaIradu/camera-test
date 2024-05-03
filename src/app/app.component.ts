@@ -64,9 +64,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       return Promise.reject();
     }
   }
-  handleClick(){
-    alert(this.hasPermission)
-  }
+ 
   openDialog() {
        this.requestPermission()
         .then(() => {
@@ -80,7 +78,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         });
     
   }
-  handleTestClick(){
+  handleClick(){
     alert('test')
   }
 
