@@ -48,7 +48,9 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   handleClick(){
-    document.getElementById('input')?.click();
+    if(this.hasPermission){
+      document.getElementById('input')?.click();
+    }
 
   }
 
