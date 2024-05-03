@@ -77,6 +77,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         this.hasPermissions().then((result:any) =>{
             if(result.state == "granted"){
               this.hasPermission = true;
+              alert("granted")
               if(this.cameraButtonClicked){
                 document.getElementById('button')?.click()
                 this.cameraButtonClicked=false;
