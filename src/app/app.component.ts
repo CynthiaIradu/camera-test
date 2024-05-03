@@ -70,6 +70,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         .then(() => {
           this.hasPermission = true;
           this.cd.detectChanges()
+          alert(this.hasPermission)
           document.getElementById('button')?.click()
         })
         .catch((error) => {
