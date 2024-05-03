@@ -41,7 +41,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       // let result = await this.requestPermission()
       //  alert(result)
       //  })();
-      let result = await this.requestPermission()
+      let result =  this.requestPermission()
       alert(result)
       document.getElementById('input')?.click();
     })
