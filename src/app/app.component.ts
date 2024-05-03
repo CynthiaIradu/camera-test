@@ -41,7 +41,7 @@ export class AppComponent implements OnInit {
       if(!this.hasPermission){
         this.openDialog()
       }
-      console.log("clicked",this.hasPermission )
+      alert(`clicked ${this.hasPermission}` )
      })
      
   }
