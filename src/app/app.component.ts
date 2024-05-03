@@ -67,8 +67,8 @@ export class AppComponent implements OnInit {
       this.requestPermission().then(() =>{
         this.hasPermission = true
         if(this.hasPermission && this.isMobile){
-          this.cameraButton._elementRef.nativeElement.addEventListener('click', () => {
-               this.cameraInput.click()
+          document.getElementById('button')?.addEventListener('click', () => {
+               document.getElementById('input')?.click()
           })
           document.getElementById('button')?.click()
           this.cd.detectChanges()
