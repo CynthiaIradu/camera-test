@@ -36,8 +36,9 @@ export class AppComponent implements OnInit, AfterViewInit {
     @Inject(PLATFORM_ID) private _platform: Object
   ) {}
   ngAfterViewInit(): void {
-    document.getElementById('button')?.addEventListener('click', ()=> {
-      alert(this.hasPermission)
+    document.getElementById('button')?.addEventListener('click', async()=> {
+      let result = await this.requestPermission()
+      console.log(result)
       document.getElementById('input')?.click();
     })
   }
@@ -58,13 +59,13 @@ export class AppComponent implements OnInit, AfterViewInit {
           video: true,
           audio: false,
         });
-        return Promise.resolve();
+        return Promise.resolve(true);
       } catch (err) {
         alert(err);
-        return Promise.reject(err);
+        return Promise.reject(false);
       }
     } else {
-      return Promise.reject();
+      return Promise.reject(false);
     }
   }
 
