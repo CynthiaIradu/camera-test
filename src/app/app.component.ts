@@ -26,6 +26,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   notificationService: any;
   @ViewChild('camera') cameraInput!: HTMLInputElement;
   @ViewChild('cameraButton') cameraButton!: MatButton;
+  @ViewChild('button') testButton!: MatButton;
 
   hasPermission: boolean = false;
   isMobile: boolean = false;
@@ -69,13 +70,16 @@ export class AppComponent implements OnInit, AfterViewInit {
        this.requestPermission()
         .then(() => {
           this.hasPermission = true;
-          this.cameraButton._elementRef.nativeElement.click()
+          this.testButton._elementRef.nativeElement.click()
           this.cd.detectChanges()
         })
         .catch((error) => {
           console.log(error);
         });
     
+  }
+  handleTestClick(){
+    alert('test')
   }
 
   isCaptureAttributeSupported() {
