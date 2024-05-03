@@ -8,11 +8,11 @@ import {
 import { RouterOutlet } from '@angular/router';
 import { CameraDialogComponent } from './camera-dialog/camera-dialog.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { isPlatformBrowser } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, MatDialogModule],
+  imports: [RouterOutlet, MatDialogModule, CommonModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
@@ -20,6 +20,9 @@ export class AppComponent implements OnInit {
   title = 'cameraTest';
   notificationService: any;
   @ViewChild('camera') cameraInput!: HTMLInputElement;
+  hasPermission: boolean = false;
+  isMobile: boolean = false;
+  stream!: MediaStream;
   constructor(
     public dialog: MatDialog,
     @Inject(PLATFORM_ID) private _platform: Object
@@ -34,7 +37,7 @@ export class AppComponent implements OnInit {
   async requestPermission() {
     if (isPlatformBrowser(this._platform) && 'mediaDevices' in navigator) {
       try {
-        let stream = await navigator.mediaDevices.getUserMedia({
+          this.stream = await navigator.mediaDevices.getUserMedia({
           video: true,
           audio: false,
         });
@@ -50,22 +53,24 @@ export class AppComponent implements OnInit {
 
   openDialog(){
     this.requestPermission().then(() =>{
-      setTimeout(() => {
-        this.cameraInput.click();
-      }, 0); // Adjust the delay as needed
-    }).catch((error)=>{
+      this.hasPermission = true
+      }).catch((error)=>{
       console.log(error)
     })
   }
 
   isCaptureAttributeSupported() {
-    var input = document.createElement('input');
-    return 'capture' in input;
+    let input = document.createElement('input');
+    if ('capture' in input) {
+      this.isMobile = true;
+    } else {
+      this.isMobile = false;
+    }
   }
 
-  openDialog2(stream: MediaStream) {
+  openDialog2() {
     let dialogRef = this.dialog.open(CameraDialogComponent, {
-      data: { stream: stream },
+      data: { stream: this.stream },
     });
     dialogRef.afterClosed().subscribe((photo) => {
       if (photo) {
