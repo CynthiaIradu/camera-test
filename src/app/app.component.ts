@@ -73,18 +73,40 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
  
   openDialog() {
-       this.requestPermission()
-        .then(() => {
-          this.hasPermission = true;
-          this.cameraButtonClicked = true;
-          this.cd.detectChanges()
+    this.cameraButtonClicked=true;
+        this.hasPermissions().then((result:any) =>{
+            if(result.state == "granted"){
+              this.hasPermission = true;
+              if(this.cameraButtonClicked){
+                document.getElementById('button')?.click()
+                this.cameraButtonClicked=false;
+              }
+            }else if(result.state == 'prompt'){
+              this.requestPermission()
+              .then(() => {
+                // this.hasPermission = true;
+              })
+              .catch((error) => {
+                this.hasPermission = false;
+                console.log(error);
+              })
+            }else{
+              this.hasPermission = false;
+            }
+        }).catch((err)=>{
 
         })
-        .catch((error) => {
-          this.hasPermission = false;
-          console.log(error);
-        });
+      this.cd.detectChanges()
     
+  }
+
+  async hasPermissions()  {
+      try{
+         let result  = await navigator.permissions.query({ name: "geolocation" })
+        return Promise.resolve(result)
+      }catch(err){
+         return Promise.resolve(err)
+      }
   }
   
   isCaptureAttributeSupported() {
