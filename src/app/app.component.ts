@@ -37,6 +37,12 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.isCaptureAttributeSupported()
+    document.getElementById('button')?.addEventListener('click', () => {
+      if(!this.hasPermission){
+        this.openDialog()
+      }
+      console.log("clicked",this.hasPermission )
+     })
      
   }
 
@@ -66,7 +72,7 @@ export class AppComponent implements OnInit {
     this.requestPermission().then(() =>{
       this.hasPermission = true
       if(this.hasPermission && this.isMobile){
-        document.getElementById('input')?.click()
+        document.getElementById('button')?.click()
         this.cd.detectChanges()
       }else{
         this.openDialog2()
