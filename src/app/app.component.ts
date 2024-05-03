@@ -76,7 +76,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
           setTimeout(()=>{
              document.getElementById('button')?.click()
-          }, 5)
+          }, 1)
         })
         .catch((error) => {
           this.hasPermission = false;
