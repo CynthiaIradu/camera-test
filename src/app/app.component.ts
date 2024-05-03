@@ -2,6 +2,7 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
+  DoCheck,
   Inject,
   OnInit,
   PLATFORM_ID,
@@ -21,7 +22,7 @@ import { MatButton } from '@angular/material/button';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent implements OnInit, AfterViewInit {
+export class AppComponent implements OnInit, AfterViewInit, DoCheck {
   title = 'cameraTest';
   notificationService: any;
   @ViewChild('camera') cameraInput!: HTMLInputElement;
@@ -67,7 +68,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
   ngDoCheck(){
     if(this.buttonClicked && this.hasPermission && this.isMobile){
-      document.getElementById('test')?.click()
+      alert(this.hasPermission)
+      document.getElementById('button')?.click()
       this.buttonClicked = false
     }
   }
@@ -85,10 +87,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         });
     
   }
-  handleClick(){
-    alert(this.hasPermission)
-  }
-
+  
   isCaptureAttributeSupported() {
     let input = document.createElement('input');
     if ('capture' in input) {
