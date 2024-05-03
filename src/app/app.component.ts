@@ -22,7 +22,7 @@ import { MatButton } from '@angular/material/button';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent implements OnInit, AfterViewInit, DoCheck {
+export class AppComponent implements OnInit, AfterViewInit {
   title = 'cameraTest';
   notificationService: any;
   @ViewChild('camera') cameraInput!: HTMLInputElement;
@@ -32,7 +32,6 @@ export class AppComponent implements OnInit, AfterViewInit, DoCheck {
   hasPermission: boolean = false;
   isMobile: boolean = false;
   stream!: MediaStream;
-  buttonClicked: boolean = false;
   constructor(
     public dialog: MatDialog,
     private cd: ChangeDetectorRef,
@@ -66,20 +65,17 @@ export class AppComponent implements OnInit, AfterViewInit, DoCheck {
       return Promise.reject();
     }
   }
-  ngDoCheck(){
-    if(this.buttonClicked && this.hasPermission && this.isMobile){
-      alert(this.hasPermission)
-      document.getElementById('button')?.click()
-      this.buttonClicked = false
-    }
-  }
+  
  
   openDialog() {
        this.requestPermission()
         .then(() => {
           this.hasPermission = true;
-          this.buttonClicked = true;
           this.cd.detectChanges()
+
+          setTimeout(()=>{
+            document.getElementById('button')?.click()
+          }, 5)
         })
         .catch((error) => {
           this.hasPermission = false;
