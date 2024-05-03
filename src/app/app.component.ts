@@ -88,10 +88,12 @@ export class AppComponent implements OnInit, AfterViewInit {
               this.requestPermission()
               .then(() => {
                 if(this.isMobile){
-                  this.hasPermissions().then((result)=>{
-                    if(result == "granted"){
+                  this.hasPermissions().then((result:any)=>{
+                    if(result.state == "granted"){
                         alert("granted")
                       document.getElementById('button')?.click()
+                    }else{
+                        alert('not granted')
                     }
                   })
                 }else{
