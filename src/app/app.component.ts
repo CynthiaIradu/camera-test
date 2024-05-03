@@ -88,6 +88,7 @@ export class AppComponent implements OnInit, AfterViewInit {
               this.requestPermission()
               .then(() => {
                 if(this.isMobile){
+                  alert('mobile')
                   this.hasPermissions().then((result:any)=>{
                     if(result.state == "granted"){
                         alert("granted")
