@@ -40,11 +40,11 @@ export class AppComponent implements OnInit {
      
   }
   ngAfterViewInit(){
-    document.getElementById('button')?.addEventListener('click', this.handleClick.bind(this))
+    this.cameraButton._elementRef.nativeElement.addEventListener('click', this.handleClick.bind(this))
   }
   handleClick(){
     if(this.hasPermission && this.isMobile){
-      document.getElementById('input')?.click()
+      this.cameraInput.click()
     }
   }
 
