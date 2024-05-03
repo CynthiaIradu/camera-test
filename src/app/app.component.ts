@@ -27,7 +27,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild('camera') cameraInput!: HTMLInputElement;
   @ViewChild('cameraButton') cameraButton!: MatButton;
 
-  hasPermission: boolean = false;
+  hasPermission: boolean = true;
   isMobile: boolean = false;
   stream!: MediaStream;
   constructor(
@@ -36,14 +36,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     @Inject(PLATFORM_ID) private _platform: Object
   ) {}
   ngAfterViewInit(): void {
-    document.getElementById('button')?.addEventListener('click', async()=> {
-       this.requestPermission().then(result =>{
-        document.getElementById('input')?.click();
-       }).catch((error) =>{
-           console.log(error)
-       })
-      
-    })
+   
   }
 
   ngOnInit(): void {
@@ -62,19 +55,18 @@ export class AppComponent implements OnInit, AfterViewInit {
           video: true,
           audio: false,
         });
-        return Promise.resolve(true);
+        return Promise.resolve();
       } catch (err) {
         alert(err);
-        return Promise.reject(false);
+        return Promise.reject(err);
       }
     } else {
-      return Promise.reject(true);
+      return Promise.reject();
     }
   }
 
   openDialog() {
-    if (!this.stream) {
-      this.requestPermission()
+       this.requestPermission()
         .then(() => {
           this.hasPermission = true;
           if (this.hasPermission && this.isMobile) {
@@ -86,7 +78,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         .catch((error) => {
           console.log(error);
         });
-    }
+    
   }
 
   isCaptureAttributeSupported() {

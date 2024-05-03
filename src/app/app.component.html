@@ -4,5 +4,5 @@ id="input"
 accept="image/*"
 multiple="true"
 (change)="onFileSelected($event)" capture="camera">
-<button  #button id="button" >open dialog</button>
+<button  #button id="button" (click)="hasPermission?camera.click():null">open dialog</button>
  
