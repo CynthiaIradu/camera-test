@@ -48,6 +48,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   handleClick(){
+    alert(this.hasPermission)
     if(this.hasPermission){
       document.getElementById('input')?.click();
     }
@@ -72,8 +73,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   openDialog() {
-    alert('clicked')
-       this.requestPermission()
+    if (!this.stream) {
+      this.requestPermission()
         .then(() => {
           this.hasPermission = true;
           if (this.hasPermission && this.isMobile) {
@@ -85,7 +86,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         .catch((error) => {
           console.log(error);
         });
-    
+    }
   }
 
   isCaptureAttributeSupported() {
