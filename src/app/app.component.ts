@@ -39,18 +39,7 @@ export class AppComponent implements OnInit {
     this.isCaptureAttributeSupported()
      
   }
-  ngAfterViewInit(){
-    document.getElementById('button')?.addEventListener('click', () => {
-      alert(this.hasPermission)
-      if(this.hasPermission && this.isMobile){
-        document.getElementById('input')?.click()
-      }
-    })
-  }
-  handleClick(){
-    
-  }
-
+ 
   onFileSelected(event: Event) {
     console.log(event);
   }
@@ -78,6 +67,11 @@ export class AppComponent implements OnInit {
       this.requestPermission().then(() =>{
         this.hasPermission = true
         if(this.hasPermission && this.isMobile){
+          this.cameraButton._elementRef.nativeElement.addEventListener('click', () => {
+            if(this.hasPermission && this.isMobile){
+              this.cameraInput.click()
+            }
+          })
           document.getElementById('button')?.click()
           this.cd.detectChanges()
         }else{
