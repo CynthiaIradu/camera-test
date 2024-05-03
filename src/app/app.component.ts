@@ -40,12 +40,15 @@ export class AppComponent implements OnInit {
      
   }
   ngAfterViewInit(){
-    this.cameraButton._elementRef.nativeElement.addEventListener('click', this.handleClick.bind(this))
+    document.getElementById('button')?.addEventListener('click', () => {
+      alert(this.hasPermission)
+      if(this.hasPermission && this.isMobile){
+        document.getElementById('input')?.click()
+      }
+    })
   }
   handleClick(){
-    if(this.hasPermission && this.isMobile){
-      this.cameraInput.click()
-    }
+    
   }
 
   onFileSelected(event: Event) {
