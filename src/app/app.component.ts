@@ -73,6 +73,7 @@ export class AppComponent implements OnInit, AfterViewInit {
           this.cd.detectChanges()
         })
         .catch((error) => {
+          this.hasPermission = false;
           console.log(error);
         });
     
