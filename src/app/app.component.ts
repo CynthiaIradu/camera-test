@@ -73,6 +73,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
  
   openDialog() {
+    alert("opened")
          this.hasPermissions().then((result:any) =>{
              if(result.state == "granted"){
               console.log("granted")
