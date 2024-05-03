@@ -38,9 +38,7 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.isCaptureAttributeSupported()
     document.getElementById('button')?.addEventListener('click', () => {
-      if(!this.hasPermission){
-        this.openDialog()
-      }
+      document.getElementById('input')?.click()
       alert(`clicked ${this.hasPermission}` )
      })
      
