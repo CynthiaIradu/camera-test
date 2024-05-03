@@ -32,6 +32,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   hasPermission: boolean = false;
   isMobile: boolean = false;
   stream!: MediaStream;
+  cameraButtonClicked: boolean = false;
   constructor(
     public dialog: MatDialog,
     private cd: ChangeDetectorRef,
@@ -67,6 +68,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
   handleClick(){
       document.getElementById('button')?.click()
+      this.cameraButtonClicked = false;
   }
  
   openDialog() {
@@ -74,6 +76,7 @@ export class AppComponent implements OnInit, AfterViewInit {
        this.requestPermission()
         .then(() => {
           this.hasPermission = true;
+          this.cameraButtonClicked = true;
           this.cd.detectChanges()
 
         })
