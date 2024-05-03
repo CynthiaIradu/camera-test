@@ -66,18 +66,21 @@ export class AppComponent implements OnInit {
   }
 
   openDialog(){
-    this.requestPermission().then(() =>{
-      this.hasPermission = true
-      if(this.hasPermission && this.isMobile){
-        document.getElementById('button')?.click()
+    if(!this.stream){
+      this.requestPermission().then(() =>{
+        this.hasPermission = true
+        if(this.hasPermission && this.isMobile){
+          document.getElementById('button')?.click()
+          this.cd.detectChanges()
+        }else{
+          this.openDialog2()
+        }
         this.cd.detectChanges()
-      }else{
-        this.openDialog2()
-      }
-      this.cd.detectChanges()
-      }).catch((error)=>{
-         console.log(error)
-     })
+        }).catch((error)=>{
+           console.log(error)
+       })
+    }
+   
   }
 
   isCaptureAttributeSupported() {
