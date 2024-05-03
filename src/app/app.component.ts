@@ -73,20 +73,26 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
  
   openDialog() {
-    this.cameraButtonClicked=true;
-        this.hasPermissions().then((result:any) =>{
-            if(result.state == "granted"){
-              this.hasPermission = true;
-              alert("granted")
-              if(this.cameraButtonClicked){
+         this.hasPermissions().then((result:any) =>{
+             if(result.state == "granted"){
+              console.log("granted")
+               this.hasPermission = true;
+               if(this.isMobile){
                 document.getElementById('button')?.click()
-                this.cameraButtonClicked=false;
+              }else{
+                this.openDialog2()
               }
             }else if(result.state == 'prompt'){
+              console.log("prompt")
+
               this.requestPermission()
               .then(() => {
-                // this.hasPermission = true;
-              })
+                if(this.isMobile){
+                  document.getElementById('button')?.click()
+                }else{
+                  this.openDialog2()
+                }
+               })
               .catch((error) => {
                 this.hasPermission = false;
                 console.log(error);
@@ -97,7 +103,6 @@ export class AppComponent implements OnInit, AfterViewInit {
         }).catch((err)=>{
 
         })
-      this.cd.detectChanges()
     
   }
 
