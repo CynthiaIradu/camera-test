@@ -36,7 +36,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     @Inject(PLATFORM_ID) private _platform: Object
   ) {}
   ngAfterViewInit(): void {
-   
+   this.cameraButton._elementRef.nativeElement.addEventListener('click' , this.openDialog())
   }
 
   ngOnInit(): void {
@@ -69,11 +69,7 @@ export class AppComponent implements OnInit, AfterViewInit {
        this.requestPermission()
         .then(() => {
           this.hasPermission = true;
-          if (this.hasPermission && this.isMobile) {
-            document.getElementById('button')?.click();
-          } else {
-            this.openDialog2();
-          }
+          this.cameraButton._elementRef.nativeElement.click()
         })
         .catch((error) => {
           console.log(error);
