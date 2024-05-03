@@ -37,7 +37,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   ) {}
   ngAfterViewInit(): void {
     document.getElementById('button')?.addEventListener('click', ()=> {
-      this.handleClick.bind(this);
+      document.getElementById('input')?.click();
     })
   }
 
@@ -49,9 +49,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     console.log(event);
   }
 
-  handleClick(){
-       document.getElementById('input')?.click();
-  }
 
   async requestPermission() {
     if (isPlatformBrowser(this._platform) && 'mediaDevices' in navigator) {
