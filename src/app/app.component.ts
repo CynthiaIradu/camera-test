@@ -31,6 +31,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   hasPermission: boolean = false;
   isMobile: boolean = false;
   stream!: MediaStream;
+  buttonClicked: boolean = false;
   constructor(
     public dialog: MatDialog,
     private cd: ChangeDetectorRef,
@@ -64,13 +65,19 @@ export class AppComponent implements OnInit, AfterViewInit {
       return Promise.reject();
     }
   }
+  ngDoCheck(){
+    if(this.buttonClicked && this.hasPermission && this.isMobile){
+      document.getElementById('test')?.click()
+      this.buttonClicked = false
+    }
+  }
  
   openDialog() {
        this.requestPermission()
         .then(() => {
           this.hasPermission = true;
+          this.buttonClicked = true;
           this.cd.detectChanges()
-          document.getElementById('test')?.click()
         })
         .catch((error) => {
           this.hasPermission = false;
