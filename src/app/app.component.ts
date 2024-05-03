@@ -36,7 +36,10 @@ export class AppComponent implements OnInit, AfterViewInit {
     @Inject(PLATFORM_ID) private _platform: Object
   ) {}
   ngAfterViewInit(): void {
-    document.getElementById('button')?.addEventListener('click', this.handleClick.bind(this));
+    document.getElementById('button')?.addEventListener('click', ()=> {
+      alert("hello")
+      this.handleClick.bind(this);
+    })
   }
 
   ngOnInit(): void {
