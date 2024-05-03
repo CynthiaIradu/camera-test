@@ -72,8 +72,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   openDialog() {
-    if (!this.stream) {
-      this.requestPermission()
+       this.requestPermission()
         .then(() => {
           this.hasPermission = true;
           if (this.hasPermission && this.isMobile) {
@@ -85,7 +84,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         .catch((error) => {
           console.log(error);
         });
-    }
+    
   }
 
   isCaptureAttributeSupported() {
