@@ -67,12 +67,13 @@ export class AppComponent implements OnInit, AfterViewInit {
     }
   }
   handleClick(){
+    alert('called')
       document.getElementById('button')?.click()
       this.cameraButtonClicked = false;
+      this.cd.detectChanges()
   }
  
   openDialog() {
-    alert('clicked')
        this.requestPermission()
         .then(() => {
           this.hasPermission = true;
