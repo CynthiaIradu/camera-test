@@ -64,14 +64,15 @@ export class AppComponent implements OnInit, AfterViewInit {
       return Promise.reject();
     }
   }
-
+  handleClick(){
+    alert(this.hasPermission)
+  }
   openDialog() {
        this.requestPermission()
         .then(() => {
           this.hasPermission = true;
           this.cd.detectChanges()
-          alert(this.hasPermission)
-          document.getElementById('button')?.click()
+          document.getElementById('test')?.click()
         })
         .catch((error) => {
           this.hasPermission = false;
