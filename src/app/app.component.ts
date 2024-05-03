@@ -50,7 +50,9 @@ export class AppComponent implements OnInit {
 
   openDialog(){
     this.requestPermission().then(() =>{
-      this.cameraInput.click()
+      setTimeout(() => {
+        this.cameraInput.click();
+      }, 100); // Adjust the delay as needed
     }).catch((error)=>{
       console.log(error)
     })
