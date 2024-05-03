@@ -61,13 +61,13 @@ export class AppComponent implements OnInit, AfterViewInit {
           video: true,
           audio: false,
         });
-        return Promise.resolve();
+        return Promise.resolve(true);
       } catch (err) {
         alert(err);
-        return Promise.reject(err);
+        return Promise.reject(false);
       }
     } else {
-      return Promise.reject();
+      return Promise.reject(true);
     }
   }
 
