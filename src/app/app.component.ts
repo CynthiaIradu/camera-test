@@ -36,8 +36,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     @Inject(PLATFORM_ID) private _platform: Object
   ) {}
   ngAfterViewInit(): void {
-   this.cameraButton._elementRef.nativeElement.addEventListener('click' , this.openDialog())
-  }
+   }
 
   ngOnInit(): void {
     this.isCaptureAttributeSupported();
