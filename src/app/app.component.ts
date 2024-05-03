@@ -38,7 +38,9 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.isCaptureAttributeSupported()
     document.getElementById('button')?.addEventListener('click', () => {
-      document.getElementById('input')?.click()
+      if(this.hasPermission && this.isMobile){
+        document.getElementById('input')?.click()
+      }
     })
      
   }
