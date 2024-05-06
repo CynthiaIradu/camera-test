@@ -43,6 +43,14 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.isCaptureAttributeSupported();
+    const input = document.getElementById('input')
+    if(input){
+      input.addEventListener('click', function(event) {
+        console.log('clicked')
+        // Do something when input is clicked
+    });
+    }
+   
   }
 
   onFileSelected(event: Event) {
