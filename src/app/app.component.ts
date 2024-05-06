@@ -117,6 +117,7 @@ async openCamera(): Promise<void> {
        let button =  document.getElementById('button')
        if(button){
         button.innerHTML = 'test'
+        button.click()
        }
     } catch (error) {
         console.error('Error opening camera:', error);
