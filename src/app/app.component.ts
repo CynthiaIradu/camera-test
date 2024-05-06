@@ -49,46 +49,78 @@ export class AppComponent implements OnInit, AfterViewInit {
     console.log(event);
   }
 
-
-  async requestPermission() {
-    if (isPlatformBrowser(this._platform) && 'mediaDevices' in navigator) {
-      try {
-        this.stream = await navigator.mediaDevices.getUserMedia({
-          video: true,
-          audio: false,
-        });
-        return Promise.resolve();
-      } catch (err) {
-        alert(err);
-        return Promise.reject(err);
-      }
-    } else {
-      return Promise.reject();
-    }
-  }
+ 
   handleClick(){
        document.getElementById('button')?.click()
       this.cameraButtonClicked = false;
       this.cd.detectChanges()
   }
  
-  openDialog() {
-    this.requestPermission().then(() => {
-      this.hasPermission = true;
-      this.cd.detectChanges()
-      this.emulatedDevices().then((res)=>{
-        setTimeout(() =>{
-          alert('ready')
-            document.getElementById('button')?.click()
-        },500)
-      }).catch((err)=>{
-         console.log(err)
-      })
-     
-       }).catch((error)=>{
-         console.log(error)
-     });
-  }
+  async openDialog() {
+    try {
+       await this.requestPermission();
+
+        // Check if permission is already granted
+        const isPermissionGranted = await this.checkPermission();
+        alert(isPermissionGranted)
+        if (!isPermissionGranted) {
+            // If permission is not granted, request it
+            await this.requestPermission();
+        }else{
+          this.hasPermission = true
+          this.cd.detectChanges()
+        }
+       
+        // Open the camera
+        await this.openCamera();
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+async checkPermission(): Promise<boolean> {
+    try {
+        // Check if permission is already granted
+        const mediaDevices = navigator.mediaDevices || ((navigator as any).mozGetUserMedia || (navigator as any).webkitGetUserMedia);
+        if (!mediaDevices) {
+            console.error('getUserMedia is not supported');
+            return false;
+        }
+
+        // Enumerate devices to check camera access
+        const devices = await mediaDevices.enumerateDevices();
+        const isCameraAccessible = devices.some(device => device.kind === 'videoinput');
+
+        return isCameraAccessible;
+    } catch (error) {
+        console.error('Error checking permission:', error);
+        return false;
+    }
+}
+
+async requestPermission(): Promise<void> {
+    try {
+        // Request permission to access the camera
+        this.stream = await navigator.mediaDevices.getUserMedia({ video: true, audio:false });
+        console.log(this.stream)
+        // stream.getTracks().forEach(track => track.stop()); // Stop the stream immediately to release the camera
+    } catch (error) {
+        console.error('Error requesting permission:', error);
+        throw error; // Propagate the error
+    }
+}
+
+async openCamera(): Promise<void> {
+    try {
+        // Trigger the button click to open the camera
+        await new Promise(resolve => setTimeout(resolve, 100)); // Wait for a short duration to ensure permission is fully granted
+        document.getElementById('button')?.click();
+    } catch (error) {
+        console.error('Error opening camera:', error);
+        throw error; // Propagate the error
+    }
+}
+
 
    async emulatedDevices():Promise<string[]>{
     let videoInput:string[] = []
@@ -107,15 +139,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     return Promise.resolve(videoInput)
 
    }
-
-  async hasPermissions()  {
-      try{
-         let result  = await navigator.permissions.query({ name: "geolocation" })
-        return Promise.resolve(result)
-      }catch(err){
-         return Promise.resolve(err)
-      }
-  }
+ 
   
   isCaptureAttributeSupported() {
     let input = document.createElement('input');
