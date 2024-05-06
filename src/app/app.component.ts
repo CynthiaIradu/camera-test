@@ -62,7 +62,6 @@ export class AppComponent implements OnInit, AfterViewInit {
 
         // Check if permission is already granted
         const isPermissionGranted = await this.checkPermission();
-        alert(isPermissionGranted)
         if (!isPermissionGranted) {
             // If permission is not granted, request it
             await this.requestPermission();
@@ -113,7 +112,8 @@ async requestPermission(): Promise<void> {
 async openCamera(): Promise<void> {
     try {
         // Trigger the button click to open the camera
-        await new Promise(resolve => setTimeout(resolve, 1000)); // Wait for a short duration to ensure permission is fully granted
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        alert('resolved') // Wait for a short duration to ensure permission is fully granted
         document.getElementById('button')?.click();
     } catch (error) {
         console.error('Error opening camera:', error);
