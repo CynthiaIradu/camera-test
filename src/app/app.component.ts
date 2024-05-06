@@ -80,7 +80,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         setTimeout(() =>{
            alert(res)
            document.getElementById('button')?.click()
-        },100)
+        },50)
       }).catch((err)=>{
          console.log(err)
       })
