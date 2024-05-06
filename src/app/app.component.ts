@@ -85,7 +85,7 @@ async requestPermission(): Promise<void> {
       if(this.isMobile){
         this.permissionGrantedDialogRef = this.dialog.open(this.permissionGrantedDialog,)
        }else{
-        // this.permissionGrantedDialogRef = this.dialog.open(this.permissionGrantedDialog,)
+        this.permissionGrantedDialogRef = this.dialog.open(this.permissionGrantedDialog,)
          this.openDialog2()
       }
      } catch (error:any) {
