@@ -6,6 +6,7 @@ import {
   Inject,
   OnInit,
   PLATFORM_ID,
+  TemplateRef,
   ViewChild,
 } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
@@ -14,10 +15,11 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ChangeDetectorRef } from '@angular/core';
 import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, MatDialogModule, CommonModule],
+  imports: [RouterOutlet, MatDialogModule, CommonModule, MatIcon],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
@@ -28,6 +30,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild('camera') cameraInput!: HTMLInputElement;
   @ViewChild('cameraButton') cameraButton!: MatButton;
   @ViewChild('button') testButton!: MatButton;
+  @ViewChild('permissionGrantedDialog') permissionGrantedDialog!: TemplateRef<any>
 
   hasPermission: boolean = false;
   isMobile: boolean = false;
@@ -43,14 +46,6 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.isCaptureAttributeSupported();
-    const input = document.getElementById('input')
-    if(input){
-      input.addEventListener('click', function(event) {
-        alert('clicked')
-        // Do something when input is clicked
-    });
-    }
-   
   }
 
   onFileSelected(event: Event) {
@@ -66,90 +61,28 @@ export class AppComponent implements OnInit, AfterViewInit {
  
   async openDialog() {
     try {
-       await this.requestPermission();
-
-        // Check if permission is already granted
-        const isPermissionGranted = await this.checkPermission();
-        if (!isPermissionGranted) {
-            // If permission is not granted, request it
-            await this.requestPermission();
-        }else{
-          this.hasPermission = true
-          this.cd.detectChanges()
-        }
-       
-        // Open the camera
-        await this.openCamera();
+      await this.requestPermission();
+      console.log("permission granted")
+      this.dialog.open(this.permissionGrantedDialog,{})
     } catch (error) {
         console.error('Error:', error);
     }
 }
 
-async checkPermission(): Promise<boolean> {
-    try {
-        // Check if permission is already granted
-        const mediaDevices = navigator.mediaDevices || ((navigator as any).mozGetUserMedia || (navigator as any).webkitGetUserMedia);
-        if (!mediaDevices) {
-            console.error('getUserMedia is not supported');
-            return false;
-        }
-
-        // Enumerate devices to check camera access
-        const devices = await mediaDevices.enumerateDevices();
-        const isCameraAccessible = devices.some(device => device.kind === 'videoinput');
-
-        return isCameraAccessible;
-    } catch (error) {
-        console.error('Error checking permission:', error);
-        return false;
-    }
-}
+ 
 
 async requestPermission(): Promise<void> {
     try {
         // Request permission to access the camera
         this.stream = await navigator.mediaDevices.getUserMedia({ video: true, audio:false });
-        console.log(this.stream)
-        // stream.getTracks().forEach(track => track.stop()); // Stop the stream immediately to release the camera
+        return Promise.resolve()
+         // stream.getTracks().forEach(track => track.stop()); // Stop the stream immediately to release the camera
     } catch (error) {
         console.error('Error requesting permission:', error);
-        throw error; // Propagate the error
+        return Promise.reject()
     }
 }
 
-async openCamera(): Promise<void> {
-    try {
-        // Trigger the button click to open the camera
-        await new Promise(resolve => setTimeout(resolve, 100));
-       // Wait for a short duration to ensure permission is fully granted
-       let input =  document.getElementById('input')
-       if(input){
-        input.click()
-       }
-    } catch (error) {
-        console.error('Error opening camera:', error);
-        throw error; // Propagate the error
-    }
-}
-
-
-   async emulatedDevices():Promise<string[]>{
-    let videoInput:string[] = []
-    navigator.mediaDevices.enumerateDevices()
-    .then(function(devices) {
-         devices.forEach(function(device) {
-            // Check if the device is a video input (i.e., camera)
-            if (device.kind === 'videoinput') {
-               videoInput.push(device.label)
-             }
-        });
-     })
-    .catch(function(error) {
-        return Promise.reject(error)
-    });
-    return Promise.resolve(videoInput)
-
-   }
  
   
   isCaptureAttributeSupported() {

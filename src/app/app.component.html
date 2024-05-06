@@ -1,9 +1,33 @@
-<input #camera
-type="file"
-id="input"
-accept="image/*"
-multiple="true"
-(change)="onFileSelected($event)" capture="camera">
-<button  #cameraButton id="button" (click)="hasPermission?isMobile?openDialog2():camera.click():openDialog()">open dialog test</button>
-{{hasPermission}}
-{{isMobile}}
+<input
+  #camera
+  type="file"
+  id="input"
+  accept="image/*"
+  multiple="true"
+  (change)="onFileSelected($event)"
+  capture="camera"
+/>
+<button #cameraButton id="button" (click)="openDialog()">
+  open dialog test
+</button>
+{{ hasPermission }}
+{{ isMobile }}
+
+<ng-template #permissionGrantedDialog>
+  <button
+    id="closeIcon"
+    mat-icon-button
+    aria-label="close dialog"
+    mat-dialog-close
+  >
+    <mat-icon>close</mat-icon>
+  </button>
+  <mat-icon>check</mat-icon>
+  <p>
+    Permission to access your camera granted, click continue to open camera and
+    take a photo.
+  </p>
+  <button mat-button (click)="isMobile ? camera.click() : openDialog2()">
+    Continue
+  </button>
+</ng-template>
