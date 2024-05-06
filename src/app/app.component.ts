@@ -76,7 +76,9 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.requestPermission().then(() => {
       this.hasPermission = true;
       this.cd.detectChanges()
+      setTimeout(()=>{
         alert('has Permission')
+       }, 200)
        }).catch((error)=>{
          console.log(error)
      });
