@@ -19,15 +19,18 @@
     mat-icon-button
     aria-label="close dialog"
     mat-dialog-close
-  >
+   >
     <mat-icon>close</mat-icon>
   </button>
-  <mat-icon>check</mat-icon>
+  <div id="dialogContent">
+  <mat-icon id="checkIcon" >task_alt</mat-icon>
   <p>
     Permission to access your camera granted, click continue to open camera and
     take a photo.
   </p>
-  <button mat-button (click)="isMobile ? camera.click() : openDialog2()">
+  <button mat-raised-button (click)="camera.click()" id="continueButton">
     Continue
   </button>
+</div>
+
 </ng-template>

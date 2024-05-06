@@ -16,6 +16,11 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ChangeDetectorRef } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
+
+interface videoInput  {
+  value: string;
+  viewValue: string;
+}
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -36,6 +41,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   isMobile: boolean = false;
   stream!: MediaStream;
   cameraButtonClicked: boolean = false;
+  permissionGrantedDialogRef: any;
+  videoInputs: any;
   constructor(
     public dialog: MatDialog,
     private cd: ChangeDetectorRef,
@@ -72,18 +79,57 @@ export class AppComponent implements OnInit, AfterViewInit {
  
 
 async requestPermission(): Promise<void> {
+  if (isPlatformBrowser(this._platform) && 'mediaDevices' in navigator) {
     try {
-        // Request permission to access the camera
-        this.stream = await navigator.mediaDevices.getUserMedia({ video: true, audio:false });
-        return Promise.resolve()
-         // stream.getTracks().forEach(track => track.stop()); // Stop the stream immediately to release the camera
-    } catch (error) {
-        console.error('Error requesting permission:', error);
-        return Promise.reject()
-    }
+      let stream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: false,
+      });
+      stream.getTracks().forEach(track => track.stop()); 
+
+      this.videoInputs = await this.emulatedDevices()
+       this.hasPermission = true;
+      this.cd.detectChanges()
+      if(this.isMobile){
+        this.permissionGrantedDialogRef = this.dialog.open(this.permissionGrantedDialog,)
+        document.getElementById('continueButton')?.addEventListener('click', ()=>{
+          this.permissionGrantedDialog.elementRef.nativeElement.close()
+        })
+      }else{
+         this.openDialog()
+      }
+     } catch (error:any) {
+      if(error.name == "NotAllowedError"){
+        this.notificationService.error("Unable to access your camera. Please give your browser access to camera and try again!");
+      }else{
+        this.notificationService.error(error);
+
+      }
+     }
+  } else {
+    const errorMessage = 'Current browser is not supported';
+    this.notificationService.error(errorMessage);
+   }
 }
 
- 
+async emulatedDevices(){
+  if (!navigator.mediaDevices?.enumerateDevices) {
+   console.log('enumerateDevices() not supported.');
+ } else {
+   try {
+     let devices = await navigator.mediaDevices.enumerateDevices();
+     let videoInputs:videoInput[] = []
+     devices.forEach((device) => {
+       // List cameras .
+       if (device.kind == 'videoinput' && device.label) {
+         videoInputs.push({ value: device.deviceId, viewValue: device.label });
+       }
+     });
+     return Promise.resolve(videoInputs)
+    } catch (err) {
+      return Promise.reject(err)
+   }
+}}
   
   isCaptureAttributeSupported() {
     let input = document.createElement('input');

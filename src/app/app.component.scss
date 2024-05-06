@@ -1,0 +1,25 @@
+
+#closeIcon{
+    float: right;
+    top: -24px;
+    right:-24px
+}
+#checkIcon{
+    font-size: 'xxx-large';
+    width: 100px;
+    height: 50px;
+    color: green;
+  }
+  #continueButton{
+    margin-top: 20px;
+    background-color: green;
+    color: white;
+  }
+  
+  #dialogContent{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
