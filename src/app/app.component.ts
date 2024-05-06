@@ -73,46 +73,13 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
  
   openDialog() {
-    alert("opened")
-         this.hasPermissions().then((result:any) =>{
-             if(result.state == "granted"){
-              alert("granted")
-               this.hasPermission = true;
-               if(this.isMobile){
-                document.getElementById('button')?.click()
-              }else{
-                this.openDialog2()
-              }
-            }else if(result.state == 'prompt'){
-              alert("prompt")
-
-              // this.requestPermission()
-              // .then(() => {
-              //   if(this.isMobile){
-              //     alert('mobile')
-              //     this.hasPermissions().then((result:any)=>{
-              //       if(result.state == "granted"){
-              //           alert("granted")
-              //         document.getElementById('button')?.click()
-              //       }else{
-              //           alert('not granted')
-              //       }
-              //     })
-              //   }else{
-              //     this.openDialog2()
-              //   }
-              //  })
-              // .catch((error) => {
-              //   this.hasPermission = false;
-              //   console.log(error);
-              // })
-            }else{
-              this.hasPermission = false;
-            }
-        }).catch((err)=>{
-
-        })
-    
+    this.requestPermission().then(() => {
+      this.hasPermission = true;
+      this.cd.detectChanges()
+        alert('has Permission')
+       }).catch((error)=>{
+         console.log(error)
+     });
   }
 
   async hasPermissions()  {
