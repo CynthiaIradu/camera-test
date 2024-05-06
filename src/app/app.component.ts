@@ -70,37 +70,43 @@ export class AppComponent implements OnInit, AfterViewInit {
 
  
 
-async requestPermission(): Promise<void> {
-  if (isPlatformBrowser(this._platform) && 'mediaDevices' in navigator) {
-    try {
-      let stream = await navigator.mediaDevices.getUserMedia({
-        video: true,
-        audio: false,
-      });
-      stream.getTracks().forEach(track => track.stop()); 
-
-      this.videoInputs = await this.emulatedDevices()
-       this.hasPermission = true;
-      this.cd.detectChanges()
-      if(this.isMobile){
-        this.permissionGrantedDialogRef = this.dialog.open(this.permissionGrantedDialog,)
-       }else{
-        this.permissionGrantedDialogRef = this.dialog.open(this.permissionGrantedDialog,)
-        //  this.openDialog2()
-      }
-     } catch (error:any) {
-      if(error.name == "NotAllowedError"){
-        this.notificationService.error("Unable to access your camera. Please give your browser access to camera and try again!");
-      }else{
-        this.notificationService.error(error);
-
-      }
+  async requestPermission() {
+    if (isPlatformBrowser(this._platform) && 'mediaDevices' in navigator) {
+      try {
+        let stream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+          audio: false,
+        });
+        stream.getTracks().forEach(track => track.stop()); 
+  
+        this.videoInputs = await this.emulatedDevices()
+         this.hasPermission = true;
+        this.cd.detectChanges()
+        if(this.isMobile){
+          this.permissionGrantedDialogRef = this.dialog.open(this.permissionGrantedDialog,)
+          document.getElementById('continueButton')?.addEventListener('click', ()=>{
+            this.permissionGrantedDialog.elementRef.nativeElement.close()
+          })
+          this.permissionGrantedDialogRef.beforeClosed().subscribe(()=>{
+            document.getElementById('continueButton')?.removeEventListener('click', ()=>{
+              this.permissionGrantedDialog.elementRef.nativeElement.close()
+            }) 
+          })
+        }else{
+           this.openDialog2()
+        }
+       } catch (error:any) {
+        if(error.name == "NotAllowedError"){
+          alert("Unable to access your camera. Please give your browser access to camera and try again!");
+        }else{
+          alert(error);
+        }
+       }
+    } else {
+      const errorMessage = 'Current browser is not supported';
+      alert(errorMessage);
      }
-  } else {
-    const errorMessage = 'Current browser is not supported';
-    this.notificationService.error(errorMessage);
-   }
-}
+  }
 
 async emulatedDevices(){
   if (!navigator.mediaDevices?.enumerateDevices) {
