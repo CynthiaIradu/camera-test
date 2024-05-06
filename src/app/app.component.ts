@@ -115,6 +115,7 @@ async requestPermission(): Promise<void> {
 async emulatedDevices(){
   if (!navigator.mediaDevices?.enumerateDevices) {
    console.log('enumerateDevices() not supported.');
+    return Promise.reject()
  } else {
    try {
      let devices = await navigator.mediaDevices.enumerateDevices();
