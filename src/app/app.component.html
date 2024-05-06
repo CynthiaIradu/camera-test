@@ -6,12 +6,12 @@
   multiple="true"
   (change)="onFileSelected($event)"
   capture="camera"
+  hidden="true"
 />
 <button #cameraButton id="button" (click)="hasPermission?isMobile?camera.click():openDialog2():requestPermission()">
-  open dialog test
+  open camera
 </button>
-{{ hasPermission }}
-{{ isMobile }}
+
 
 <ng-template #permissionGrantedDialog>
   <button
