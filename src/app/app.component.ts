@@ -76,14 +76,36 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.requestPermission().then(() => {
       this.hasPermission = true;
       this.cd.detectChanges()
-      setTimeout(()=>{
-        console.log(this.cameraButton)
-         document.getElementById('button')?.click()
-       }, 200)
+      this.emulatedDevices().then((res)=>{
+        setTimeout(() =>{
+          alert(res.length)
+        },2)
+      }).catch((err)=>{
+         console.log(err)
+      })
+     
        }).catch((error)=>{
          console.log(error)
      });
   }
+
+   async emulatedDevices():Promise<string[]>{
+    let videoInput:string[] = []
+    navigator.mediaDevices.enumerateDevices()
+    .then(function(devices) {
+         devices.forEach(function(device) {
+            // Check if the device is a video input (i.e., camera)
+            if (device.kind === 'videoinput') {
+               videoInput.push(device.label)
+             }
+        });
+     })
+    .catch(function(error) {
+        return Promise.reject(error)
+    });
+    return Promise.resolve(videoInput)
+
+   }
 
   async hasPermissions()  {
       try{
