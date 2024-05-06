@@ -46,7 +46,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     const input = document.getElementById('input')
     if(input){
       input.addEventListener('click', function(event) {
-        console.log('clicked')
+        alert('clicked')
         // Do something when input is clicked
     });
     }
