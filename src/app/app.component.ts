@@ -114,7 +114,10 @@ async openCamera(): Promise<void> {
         // Trigger the button click to open the camera
         await new Promise(resolve => setTimeout(resolve, 15000));
        // Wait for a short duration to ensure permission is fully granted
-        document.getElementById('button')?.click();
+       let button =  document.getElementById('button')
+       if(button){
+        button.innerHTML = 'test'
+       }
     } catch (error) {
         console.error('Error opening camera:', error);
         throw error; // Propagate the error
