@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { CameraDialogComponent } from './camera-dialog/camera-dialog.component';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ChangeDetectorRef } from '@angular/core';
 import { MatButton } from '@angular/material/button';
@@ -36,12 +36,11 @@ export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild('cameraButton') cameraButton!: MatButton;
   @ViewChild('button') testButton!: MatButton;
   @ViewChild('permissionGrantedDialog') permissionGrantedDialog!: TemplateRef<any>
-
+  permissionGrantedDialogRef!:MatDialogRef<any>
   hasPermission: boolean = false;
   isMobile: boolean = false;
   stream!: MediaStream;
   cameraButtonClicked: boolean = false;
-  permissionGrantedDialogRef: any;
   videoInputs: any;
   constructor(
     public dialog: MatDialog,
