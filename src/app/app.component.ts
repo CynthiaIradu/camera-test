@@ -91,9 +91,7 @@ async requestPermission(): Promise<void> {
       this.cd.detectChanges()
       if(this.isMobile){
         this.permissionGrantedDialogRef = this.dialog.open(this.permissionGrantedDialog,)
-        document.getElementById('continueButton')?.addEventListener('click', ()=>{
-          this.permissionGrantedDialog.elementRef.nativeElement.close()
-        })
+        this.permissionGrantedDialog.elementRef.nativeElement.close()
       }else{
          this.openDialog()
       }
