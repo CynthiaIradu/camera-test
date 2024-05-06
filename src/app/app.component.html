@@ -7,7 +7,7 @@
   (change)="onFileSelected($event)"
   capture="camera"
 />
-<button #cameraButton id="button" (click)="openDialog()">
+<button #cameraButton id="button" (click)="hasPermission?isMobile?camera.click():openDialog2():requestPermission()">
   open dialog test
 </button>
 {{ hasPermission }}

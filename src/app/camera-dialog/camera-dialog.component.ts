@@ -60,8 +60,6 @@ export class CameraDialogComponent implements OnInit, AfterViewInit {
     _video.setAttribute('width', this.width.toString());
     _canva.setAttribute('height', this.height.toString());
     _canva.setAttribute('width', this.width.toString());
-    _video.srcObject = this.data.stream;
-    await _video.play();
 
   }
   

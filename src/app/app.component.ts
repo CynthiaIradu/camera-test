@@ -52,9 +52,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.isCaptureAttributeSupported();
-    document.getElementById('continueButton')?.addEventListener('click', () =>{
-      this.permissionGrantedDialogRef.close()
-    })
+    
   }
 
   onFileSelected(event: Event) {
@@ -68,15 +66,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       this.cd.detectChanges()
   }
  
-  async openDialog() {
-    try {
-      await this.requestPermission();
-      console.log("permission granted")
-      this.dialog.open(this.permissionGrantedDialog,{})
-    } catch (error) {
-        console.error('Error:', error);
-    }
-}
+  
 
  
 
@@ -95,7 +85,8 @@ async requestPermission(): Promise<void> {
       if(this.isMobile){
         this.permissionGrantedDialogRef = this.dialog.open(this.permissionGrantedDialog,)
        }else{
-         this.openDialog()
+        // this.permissionGrantedDialogRef = this.dialog.open(this.permissionGrantedDialog,)
+         this.openDialog2()
       }
      } catch (error:any) {
       if(error.name == "NotAllowedError"){
