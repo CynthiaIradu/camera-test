@@ -29,7 +29,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild('cameraButton') cameraButton!: MatButton;
   @ViewChild('button') testButton!: MatButton;
 
-  hasPermission: boolean = true;
+  hasPermission: boolean = false;
   isMobile: boolean = false;
   stream!: MediaStream;
   cameraButtonClicked: boolean = false;
