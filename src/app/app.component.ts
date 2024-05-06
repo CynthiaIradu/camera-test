@@ -79,7 +79,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       this.emulatedDevices().then((res)=>{
         setTimeout(() =>{
           alert(res.length)
-        },2)
+        },200)
       }).catch((err)=>{
          console.log(err)
       })
