@@ -78,9 +78,9 @@ export class AppComponent implements OnInit, AfterViewInit {
       this.cd.detectChanges()
       this.emulatedDevices().then((res)=>{
         setTimeout(() =>{
-           alert(res)
-           document.getElementById('button')?.click()
-        },300)
+          alert('ready')
+            document.getElementById('button')?.click()
+        },500)
       }).catch((err)=>{
          console.log(err)
       })
