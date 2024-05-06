@@ -112,7 +112,7 @@ async requestPermission(): Promise<void> {
 async openCamera(): Promise<void> {
     try {
         // Trigger the button click to open the camera
-        await new Promise(resolve => setTimeout(resolve, 5000));
+        await new Promise(resolve => setTimeout(resolve, 10000));
         alert('resolved') 
         console.log(5)// Wait for a short duration to ensure permission is fully granted
         document.getElementById('button')?.click();
