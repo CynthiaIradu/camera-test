@@ -91,7 +91,7 @@ async requestPermission(): Promise<void> {
       this.cd.detectChanges()
       if(this.isMobile){
         this.permissionGrantedDialogRef = this.dialog.open(this.permissionGrantedDialog,)
-        this.permissionGrantedDialog.elementRef.nativeElement.close()
+        this.permissionGrantedDialogRef.close()
       }else{
          this.openDialog()
       }
