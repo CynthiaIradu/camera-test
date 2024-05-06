@@ -77,7 +77,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       this.hasPermission = true;
       this.cd.detectChanges()
       setTimeout(()=>{
-        alert('has Permission')
+         this.cameraButton._elementRef.nativeElement.click()
        }, 200)
        }).catch((error)=>{
          console.log(error)
