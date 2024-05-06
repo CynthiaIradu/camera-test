@@ -52,7 +52,9 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.isCaptureAttributeSupported();
-    
+    document.getElementById('continueButton')?.addEventListener('click', ()=>{
+      this.permissionGrantedDialogRef.close()
+    })
   }
 
   onFileSelected(event: Event) {
