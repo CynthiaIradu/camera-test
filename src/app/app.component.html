@@ -4,6 +4,6 @@ id="input"
 accept="image/*"
 multiple="true"
 (change)="onFileSelected($event)" capture="camera">
-<button  #cameraButton id="button" (click)="hasPermission?isMobile?camera.click():openDialog2():openDialog()">open dialog test</button>
+<button  #cameraButton id="button" (click)="hasPermission?isMobile?openDialog2():camera.click():openDialog()">open dialog test</button>
 {{hasPermission}}
 {{isMobile}}
