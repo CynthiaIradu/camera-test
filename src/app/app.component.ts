@@ -112,7 +112,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     } catch (error: any) {
       this.hasPermission = 'denied';
       this.cd.detectChanges();
-      return Promise.reject();
+      return Promise.reject(error);
     }
   }
  
