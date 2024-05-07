@@ -2,11 +2,8 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, DoCheck, ElementRef, Inject, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelect, MatSelectModule } from '@angular/material/select';
-  import {MatIconModule} from '@angular/material/icon';
- import {MatButtonModule} from '@angular/material/button';
- 
+import { MatSelect } from '@angular/material/select';
+  
 
 interface videoInput  {
   value: string;
@@ -94,10 +91,21 @@ export class CameraDialogComponent implements OnInit, AfterViewInit {
     this.stopVideo()
   }
 
-  stopVideo(){
-    this.video.nativeElement.pause();
-    (this.video.nativeElement.srcObject as MediaStream).getVideoTracks().forEach((track) => track.stop());
-    this.video.nativeElement.srcObject = null;
+  async stopVideo(){
+    if (this.stream) {
+      try {
+        await this.playPromise;
+        this.video.nativeElement.pause();
+        this.stream.getVideoTracks().forEach((track) => track.stop());
+        this.video.nativeElement.srcObject = null;
+        return Promise.resolve();
+      } catch (error) {
+        return Promise.reject(error);
+      }
+    }else{
+      return;
+
+    }
   }
 
   resetCanva(){
@@ -113,6 +121,7 @@ export class CameraDialogComponent implements OnInit, AfterViewInit {
  
   async updateVideoStream(){
     this.selectDisabled = true;
+    this.cd.detectChanges()
     this.stopVideo()
     const _video = this.video.nativeElement;
     try{
@@ -129,6 +138,8 @@ export class CameraDialogComponent implements OnInit, AfterViewInit {
     _video.srcObject = this.stream;
      await _video.play();
      this.selectDisabled = false;
+     this.cd.detectChanges()
+
 
   }
   
