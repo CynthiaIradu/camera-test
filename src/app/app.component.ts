@@ -69,12 +69,14 @@ export class AppComponent implements OnInit, AfterViewInit {
   async requestPermission() {
     if (isPlatformBrowser(this._platform) && 'mediaDevices' in navigator) {
       try{
-        let result = await this.isPermissionGranted()
+        let result = await this.isGeolocationPermissionGranted()
         if(result.state == 'granted'){
           this.openCamera()
         }else if(result.state == 'prompt'){
-          await this.promptForAccess()
+          await this.promptForCameraAccess()
           this.openCamera()
+        }else{
+          alert(result.state)
         }
       }catch(err:any){
         if(err.name == "NotAllowedError"){
@@ -91,7 +93,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       alert(errorMessage);
     }
   }
-  async  promptForAccess(){
+  async  promptForCameraAccess(){
     try {
       let stream = await navigator.mediaDevices.getUserMedia({
         video: true,
@@ -103,7 +105,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       return Promise.reject()
      }
   }
-  async isPermissionGranted(){
+  async isGeolocationPermissionGranted(){
     try {
       const result = await navigator.permissions.query({ name: "geolocation" });
       return Promise.resolve(result)
