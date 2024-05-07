@@ -8,7 +8,7 @@
   capture="camera"
   hidden="true"
 />
-<button #cameraButton id="button" (click)="requestPermission()">
+<button #cameraButton id="button" (click)="hasPermission?isMobile?camera.click():openDialog2():requestPermission()">
   open camera
 </button>
 

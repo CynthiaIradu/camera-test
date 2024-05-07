@@ -74,7 +74,10 @@ export class AppComponent implements OnInit, AfterViewInit {
         this.openCamera()
         }else{
          await this.promptForCameraAccess()
+         this.hasPermission = true;
+         this.cd.detectChanges();
          this.openCamera()
+
         }       
       } catch (err: any) {
         if (err.name == 'NotAllowedError') {
@@ -113,8 +116,6 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
   async openCamera() {
     this.videoInputs = await this.emulatedDevices();
-    this.hasPermission = true;
-    this.cd.detectChanges();
     if (this.isMobile) {
       this.permissionGrantedDialogRef = this.dialog.open(
         this.permissionGrantedDialog
