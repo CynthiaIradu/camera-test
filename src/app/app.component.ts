@@ -40,7 +40,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild('permissionGrantedDialog')
   permissionGrantedDialog!: TemplateRef<any>;
   permissionGrantedDialogRef!: MatDialogRef<any>;
-  hasPermission: boolean = false;
+  hasPermission: string ='prompt';
   isMobile: boolean = false;
   stream!: MediaStream;
   cameraButtonClicked: boolean = false;
@@ -70,14 +70,12 @@ export class AppComponent implements OnInit, AfterViewInit {
     if (isPlatformBrowser(this._platform) && 'mediaDevices' in navigator) {
       
       try {
-        if(this.isMobile && this.hasPermission){
-        this.openCamera()
-        }else{
+        if(this.hasPermission == 'prompt'){
          await this.promptForCameraAccess()
-         this.hasPermission = true;
-         this.cd.detectChanges();
+        }else if(this.hasPermission == 'granted') {
          this.openCamera()
-
+        }else{
+          throw Error("Unable to access camera")
         }       
       } catch (err: any) {
         if (err.name == 'NotAllowedError') {
@@ -100,8 +98,12 @@ export class AppComponent implements OnInit, AfterViewInit {
         audio: false,
       });
       stream.getTracks().forEach((track) => track.stop());
+      this.hasPermission = 'granted';
+      this.cd.detectChanges();
       return Promise.resolve(true);
     } catch (error: any) {
+      this.hasPermission = 'denied';
+      this.cd.detectChanges();
       return Promise.reject();
     }
   }
