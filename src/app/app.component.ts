@@ -31,7 +31,7 @@ interface videoInput {
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnInit, AfterViewInit {
+export class AppComponent implements OnInit {
   title = 'cameraTest';
   notificationService: any;
   @ViewChild('camera') cameraInput!: HTMLInputElement;
@@ -55,10 +55,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.isCaptureAttributeSupported();
   }
-  ngAfterViewInit(): void {
-    this.CustomError.prototype = Object.create(Error.prototype);
-    this.CustomError.prototype.constructor = this.CustomError;
-  }
+ 
   onFileSelected(event: Event) {
     console.log(event);
   }
@@ -116,15 +113,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     }
   }
  
-  async isGeolocationPermissionGranted() {
-    try {
-      const permissionName = "camera" as PermissionName
-      const result = await navigator.permissions.query({ name: permissionName });
-      return Promise.resolve(result);
-    } catch (error) {
-      return Promise.reject(error);
-    }
-  }
+ 
   async openCamera() {
     this.videoInputs = await this.emulatedDevices();
     if (this.isMobile) {
@@ -196,13 +185,13 @@ export class Error {
   name:string
   constructor(message:string) {
     this.message = message;
-    this.name = "Error"; // (different names for different built-in error classes)
+    this.name = "Error"; 
    }
 }
 
 export class PermissionError extends Error {
   constructor(message: string) {
-    super(message); // (1)
-    this.name = "NotAllowedError"; // (2)
+    super(message);  
+    this.name = "NotAllowedError";  
   }
 }
