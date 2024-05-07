@@ -99,6 +99,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       });
       stream.getTracks().forEach((track) => track.stop());
       this.hasPermission = 'granted';
+      this.openCamera()
       this.cd.detectChanges();
       return Promise.resolve(true);
     } catch (error: any) {
