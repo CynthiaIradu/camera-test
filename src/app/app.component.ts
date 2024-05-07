@@ -50,12 +50,15 @@ export class AppComponent implements OnInit, AfterViewInit {
     private cd: ChangeDetectorRef,
     @Inject(PLATFORM_ID) private _platform: Object
   ) {}
-  ngAfterViewInit(): void {}
+
 
   ngOnInit(): void {
     this.isCaptureAttributeSupported();
   }
-
+  ngAfterViewInit(): void {
+    this.CustomError.prototype = Object.create(Error.prototype);
+    this.CustomError.prototype.constructor = this.CustomError;
+  }
   onFileSelected(event: Event) {
     console.log(event);
   }
@@ -68,14 +71,13 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   async requestPermission() {
     if (isPlatformBrowser(this._platform) && 'mediaDevices' in navigator) {
-       alert(this.hasPermission)
-      try {
+       try {
         if(this.hasPermission == 'prompt'){
          await this.promptForCameraAccess()
         }else if(this.hasPermission == 'granted') {
          this.openCamera()
-        }else{
-          throw Error("Unable to access camera")
+        }else if(this.hasPermission == 'denied'){
+          throw new PermissionError("Don't have permissions")
         }       
       } catch (err: any) {
         if (err.name == 'NotAllowedError') {
@@ -91,6 +93,11 @@ export class AppComponent implements OnInit, AfterViewInit {
       alert(errorMessage);
     }
   }
+
+  CustomError(this: any,) {
+    this.name = 'NotAllowedError';
+   }
+  
   async promptForCameraAccess() {
     try {
       let stream = await navigator.mediaDevices.getUserMedia({
@@ -108,6 +115,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       return Promise.reject();
     }
   }
+ 
   async isGeolocationPermissionGranted() {
     try {
       const permissionName = "camera" as PermissionName
@@ -181,5 +189,20 @@ export class AppComponent implements OnInit, AfterViewInit {
         console.log(photo);
       }
     });
+  }
+}
+export class Error {
+  message:string
+  name:string
+  constructor(message:string) {
+    this.message = message;
+    this.name = "Error"; // (different names for different built-in error classes)
+   }
+}
+
+export class PermissionError extends Error {
+  constructor(message: string) {
+    super(message); // (1)
+    this.name = "NotAllowedError"; // (2)
   }
 }
