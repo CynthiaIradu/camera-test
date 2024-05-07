@@ -68,7 +68,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   async requestPermission() {
     if (isPlatformBrowser(this._platform) && 'mediaDevices' in navigator) {
-      console.log(this.hasPermission)
+       alert(this.hasPermission)
       try {
         if(this.hasPermission == 'prompt'){
          await this.promptForCameraAccess()
