@@ -11,7 +11,6 @@
 <button #cameraButton id="button" (click)="hasPermission == 'granted'?isMobile?camera.click():openDialog2():requestPermission()">
   open camera
 </button>
-{{hasPermission}}
 
 
 <ng-template #permissionGrantedDialog>
