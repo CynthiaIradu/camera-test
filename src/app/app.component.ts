@@ -70,6 +70,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     if (isPlatformBrowser(this._platform) && 'mediaDevices' in navigator) {
       try{
         let result = await this.isGeolocationPermissionGranted()
+        console.log(result)
         if(result.state == 'granted'){
           this.openCamera()
         }else if(result.state == 'prompt'){
