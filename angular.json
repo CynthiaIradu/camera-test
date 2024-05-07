@@ -18,12 +18,11 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:application",
+          "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "dist/camera-test",
             "index": "src/index.html",
-            "browser": "src/main.ts",
-            "polyfills": [
+             "polyfills": [
               "zone.js"
             ],
             "tsConfig": "tsconfig.app.json",
@@ -66,10 +65,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "cameraTest:build:production"
+              "browserTarget": "cameraTest:build:production"
             },
             "development": {
-              "buildTarget": "cameraTest:build:development"
+              "browserTarget": "cameraTest:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -77,7 +76,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "cameraTest:build"
+            "browserTarget": "cameraTest:build"
           }
         },
         "test": {

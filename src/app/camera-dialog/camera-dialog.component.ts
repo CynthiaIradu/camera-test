@@ -16,8 +16,6 @@ interface videoInput  {
   selector: 'camera-dialog',
   templateUrl: './camera-dialog.component.html',
   styleUrls: ['./camera-dialog.component.scss'],
-   standalone: true,
-  imports: [MatSelectModule, MatFormFieldModule, MatDialogModule, MatIconModule, FormsModule, MatButtonModule,CommonModule],
   changeDetection: ChangeDetectionStrategy.OnPush
  })
 export class CameraDialogComponent implements OnInit, AfterViewInit {
@@ -39,7 +37,7 @@ export class CameraDialogComponent implements OnInit, AfterViewInit {
   constructor(
     private dialogRef: MatDialogRef<CameraDialogComponent>,
     private cd: ChangeDetectorRef,
-    @Inject(MAT_DIALOG_DATA) public data: {stream: MediaStream}
+    @Inject(MAT_DIALOG_DATA) public data: {videoInputs: videoInput[]}
     
   ) {
 
@@ -49,17 +47,19 @@ export class CameraDialogComponent implements OnInit, AfterViewInit {
     this.buttonDisabled = true;
     this.selectDisabled = true;
     this.label = 'Take Photo';
-    this.videoInputs = [];
+    this.videoInputs = this.data.videoInputs;
   }
 
   async ngAfterViewInit(){
-    this.findAvailableCameras()
+    this.updateVideoStream()
     const _video = this.video.nativeElement;
     const _canva = this.canva.nativeElement;
     _video.setAttribute('height', this.height.toString());
     _video.setAttribute('width', this.width.toString());
     _canva.setAttribute('height', this.height.toString());
     _canva.setAttribute('width', this.width.toString());
+    this.selectedVideoInput = this.videoInputs[0].value
+
 
   }
   
@@ -88,27 +88,7 @@ export class CameraDialogComponent implements OnInit, AfterViewInit {
       this.dialogRef.close('file');
     }, 'image/jpeg');
   }
-  async findAvailableCameras() {
-    if (!navigator.mediaDevices?.enumerateDevices) {
-      console.log('enumerateDevices() not supported.');
-    } else {
-      try {
-        let devices = await navigator.mediaDevices.enumerateDevices();
-         devices.forEach((device) => {
-          // List cameras .
-          if (device.kind == 'videoinput' && device.label) {
-             this.videoInputs.push({ value: device.deviceId, viewValue: device.label });
-          }
-          });
-          this.cd.detectChanges()
-          this.selectedVideoInput = this.videoInputs[0].value
-          this.selectDisabled = false;
-          this.updateVideoStream()
-         } catch (err) {
-          console.log(err)
-       }
-    }
-  }
+  
   cancel() {
     this.resetCanva()
     this.stopVideo()
@@ -132,6 +112,7 @@ export class CameraDialogComponent implements OnInit, AfterViewInit {
   }
  
   async updateVideoStream(){
+    this.selectDisabled = true;
     this.stopVideo()
     const _video = this.video.nativeElement;
     try{
@@ -147,6 +128,8 @@ export class CameraDialogComponent implements OnInit, AfterViewInit {
     
     _video.srcObject = this.stream;
      await _video.play();
+     this.selectDisabled = false;
+
   }
   
   onSelect(selectedVideoInput:string){
