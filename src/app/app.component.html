@@ -15,6 +15,7 @@
 
 
 <ng-template #permissionGrantedDialog>
+  <div id="dialog">
   <button
     id="closeIcon"
     mat-icon-button
@@ -25,13 +26,15 @@
   </button>
   <div id="dialogContent">
   <mat-icon id="checkIcon" >task_alt</mat-icon>
-  <p>
+   <p>
     Permission to access your camera granted, click continue to open camera and
     take a photo.
   </p>
+ 
   <button mat-raised-button mat-dialog-close (click)="camera.click()" id="continueButton">
     Continue
   </button>
 </div>
+ </div>
 
 </ng-template>

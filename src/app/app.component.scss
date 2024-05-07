@@ -1,8 +1,8 @@
 
 #closeIcon{
-    float: right;
-    top: -24px;
-    right:-24px
+    align-self: flex-end;
+    top:-24px;
+    right: -24px;
 }
 #checkIcon{
     font-size: 'xxx-large';
@@ -16,9 +16,11 @@
     color: white;
   }
   
-  #dialogContent{
+  #dialog{
     display: flex;
     flex-direction: column;
+  }
+  #dialogContent{
     justify-content: center;
     align-items: center;
     text-align: center;
