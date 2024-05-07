@@ -68,69 +68,72 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   async requestPermission() {
     if (isPlatformBrowser(this._platform) && 'mediaDevices' in navigator) {
-      try{
-        let result = await this.isGeolocationPermissionGranted()
-        alert(result.state)
-        if(result.state == 'granted'){
-          this.openCamera()
-        }else if(result.state == 'prompt'){
-          await this.promptForCameraAccess()
-          this.openCamera()
+      
+      try {
+        if(this.isMobile && this.hasPermission){
+        this.openCamera()
         }else{
-          alert(result.state)
-        }
-      }catch(err:any){
-        if(err.name == "NotAllowedError"){
-          alert("Unable to access your camera. Please give your browser access to camera and try again!");
-        }else{
+         await this.promptForCameraAccess()
+         this.openCamera()
+        }       
+      } catch (err: any) {
+        if (err.name == 'NotAllowedError') {
+          alert(
+            'Unable to access your camera. Please give your browser access to camera and try again!'
+          );
+        } else {
           alert(err);
-
-        }      
+        }
       }
-    
-     
     } else {
       const errorMessage = 'Current browser is not supported';
       alert(errorMessage);
     }
   }
-  async  promptForCameraAccess(){
+  async promptForCameraAccess() {
     try {
       let stream = await navigator.mediaDevices.getUserMedia({
         video: true,
         audio: false,
       });
       stream.getTracks().forEach((track) => track.stop());
-      return Promise.resolve(true)
+      return Promise.resolve(true);
     } catch (error: any) {
-      return Promise.reject()
-     }
-  }
-  async isGeolocationPermissionGranted(){
-    try {
-      const result = await navigator.permissions.query({ name: "geolocation" });
-      return Promise.resolve(result)
-    } catch (error) {
-      return Promise.reject(error)
+      return Promise.reject();
     }
   }
-  async openCamera(){
-    this.videoInputs = await this.emulatedDevices()
-         this.hasPermission = true;
-        this.cd.detectChanges()
-        if(this.isMobile){
-          this.permissionGrantedDialogRef = this.dialog.open(this.permissionGrantedDialog,)
-          document.getElementById('continueButton')?.addEventListener('click', ()=>{
-            this.permissionGrantedDialog.elementRef.nativeElement.close()
-          })
-          this.permissionGrantedDialogRef.beforeClosed().subscribe(()=>{
-            document.getElementById('continueButton')?.removeEventListener('click', ()=>{
-              this.permissionGrantedDialog.elementRef.nativeElement.close()
-            }) 
-          })
-        }else{
-           this.openDialog2()
-        }
+  async isGeolocationPermissionGranted() {
+    try {
+      const permissionName = "camera" as PermissionName
+      const result = await navigator.permissions.query({ name: permissionName });
+      return Promise.resolve(result);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+  async openCamera() {
+    this.videoInputs = await this.emulatedDevices();
+    this.hasPermission = true;
+    this.cd.detectChanges();
+    if (this.isMobile) {
+      this.permissionGrantedDialogRef = this.dialog.open(
+        this.permissionGrantedDialog
+      );
+      document
+        .getElementById('continueButton')
+        ?.addEventListener('click', () => {
+          this.permissionGrantedDialog.elementRef.nativeElement.close();
+        });
+      this.permissionGrantedDialogRef.beforeClosed().subscribe(() => {
+        document
+          .getElementById('continueButton')
+          ?.removeEventListener('click', () => {
+            this.permissionGrantedDialog.elementRef.nativeElement.close();
+          });
+      });
+    } else {
+      this.openDialog2();
+    }
   }
   async emulatedDevices() {
     if (!navigator.mediaDevices?.enumerateDevices) {
@@ -167,7 +170,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   openDialog2() {
     let dialogRef = this.dialog.open(CameraDialogComponent, {
-      data: { videoInputs: this.videoInputs},
+      data: { videoInputs: this.videoInputs },
     });
     dialogRef.afterClosed().subscribe((photo) => {
       if (photo) {
